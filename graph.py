@@ -47,6 +47,9 @@ class Node:
         else:
             return 'f'
 
+    def sample(self):
+        pass
+
     def lookup_probability(self):
         given = self._parent_values()
         prob = self._probs[given]
