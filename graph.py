@@ -27,11 +27,11 @@ class Node:
 
     @property
     def parents(self):
-        return self._graph.inv_connections.get(self.name)
+        return self._graph.inv_connections.get(self.name, [])
 
     @property
     def children(self):
-        return self._graph.connections.get(self.name)
+        return self._graph.connections.get(self.name, [])
 
     @property
     def value(self):
@@ -39,3 +39,6 @@ class Node:
             return 'T'
         else:
             return 'F'
+
+    def lookup_probability(self):
+        pass
