@@ -4,7 +4,8 @@ from burglar_alarm import alarm
 
 def main():
     graph = alarm()
-    print('woohoo!')
+    p = graph.node_dict['A'].lookup_probability()
+    print(p)
 
 if __name__ == '__main__':
     main()

@@ -48,4 +48,13 @@ class Node:
             return 'f'
 
     def lookup_probability(self):
-        pass
+        given = self._parent_values()
+        prob = self._probs[given]
+        if self._val == 1:
+            return prob
+        else:
+            return 1.0-prob
+
+    def _parent_values(self):
+        l = [p._val for p in self.parents]
+        return tuple(l)
