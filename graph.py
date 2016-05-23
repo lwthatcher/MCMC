@@ -24,3 +24,18 @@ class Node:
 
     def __str__(self):
         return self.name
+
+    @property
+    def parents(self):
+        return self._graph.inv_connections.get(self.name)
+
+    @property
+    def children(self):
+        return self._graph.connections.get(self.name)
+
+    @property
+    def value(self):
+        if self._val == 1:
+            return 'T'
+        else:
+            return 'F'
