@@ -1,9 +1,8 @@
 
-from mcmc import Graph
-from mcmc import Node
+from graph import Graph
+from graph import Node
 
 
-@property
 def alarm():
     nodes = [Node('B', {(): 0.001}),
              Node('E', {(): 0.002}),
