@@ -1,9 +1,14 @@
 
+
+
+
 class Graph:
 
     def __init__(self, connections, nodes):
         self.connections = connections
         self.nodes = nodes
+        for node in self.nodes:
+            node._graph = self
 
 
 class Node:
@@ -15,9 +20,12 @@ class Node:
         self._val = val
         self.observed = observed
 
+    def __str__(self):
+        return self.name
+
 
 def main():
-    pass
+    print('woohoo!')
 
 if __name__ == '__main__':
     main()
