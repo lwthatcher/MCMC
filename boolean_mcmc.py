@@ -1,6 +1,9 @@
 
 class Graph:
-    pass
+
+    def __init__(self, connections, nodes):
+        self.connections = connections
+        self.nodes = nodes
 
 
 class Node:
