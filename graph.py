@@ -4,8 +4,10 @@ class Graph:
         self.connections = connections
         self.nodes = nodes
 
+        self.node_dict = {}
         for node in self.nodes:
             node._graph = self
+            self.node_dict[node.name] = node
 
         self.inv_connections = {}
         for node, children in self.connections.items():
@@ -25,20 +27,25 @@ class Node:
     def __str__(self):
         return self.name
 
+    def __repr__(self):
+        return "(" + self.name + "=" + self.value + ")"
+
     @property
     def parents(self):
-        return self._graph.inv_connections.get(self.name, [])
+        p = self._graph.inv_connections.get(self.name, [])
+        return [self._graph.node_dict[n] for n in p]
 
     @property
     def children(self):
-        return self._graph.connections.get(self.name, [])
+        c = self._graph.connections.get(self.name, [])
+        return [self._graph.node_dict[n] for n in c]
 
     @property
     def value(self):
         if self._val == 1:
-            return 'T'
+            return 't'
         else:
-            return 'F'
+            return 'f'
 
     def lookup_probability(self):
         pass
