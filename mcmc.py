@@ -1,12 +1,14 @@
 
 import numpy as np
-from burglar_alarm import alarm
-
+from networks import alarm
+from networks import burn
 
 class MCMC:
 
-    def __init__(self, obs=None):
-        self.graph = alarm()
+    def __init__(self, obs=None, graph=None):
+        if graph is None:
+            graph = alarm()
+        self.graph = graph
         if obs is not None:
             for node in obs:
                 self.graph.node_dict[node]._val = obs[node]
@@ -34,6 +36,7 @@ def sample_dim(samples, dim):
     false_mean = 1 - true_mean
     return true_mean, false_mean
 
+
 def main():
     mcmc = MCMC()
     samples = mcmc.gibbs(10000, 10000)
@@ -60,6 +63,12 @@ def main():
     samples = mcmc.gibbs(10000, 10000)
     mean, f_mean = sample_dim(samples, 'B')
     print("P(Burglary | MaryCalls=true) = <", mean, ", ", f_mean, ">")
+
+    graph = burn()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'M')
+    print("P(MapoDoufu | Burn=false) = <", mean, ", ", f_mean, ">")
 
 if __name__ == '__main__':
     main()
