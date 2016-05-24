@@ -17,10 +17,13 @@ class Graph:
             for child in children:
                 self.inv_connections[child] = self.inv_connections.setdefault(child, []) + [node]
 
-        self.hidden_nodes = []
+    @property
+    def hidden_nodes(self):
+        result = []
         for node in self.nodes:
             if not node.observed:
-                self.hidden_nodes.append(node)
+                result.append(node)
+        return result
 
 
 class Node:

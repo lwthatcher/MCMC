@@ -5,8 +5,11 @@ from burglar_alarm import alarm
 
 class MCMC:
 
-    def __init__(self):
+    def __init__(self, obs=None):
         self.graph = alarm()
+        if obs is not None:
+            for node in obs:
+                self.graph.node_dict[node]._val = obs[node]
 
     def iteration(self):
         result = {}
@@ -41,6 +44,22 @@ def main():
     mean, f_mean = sample_dim(samples, 'E')
     print("P(Earthquake | JohnCalls=true, MaryCalls=true) = <", mean, ", ", f_mean, ">")
 
+    mcmc = MCMC({'J':1., 'M':0.})
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'B')
+    print("P(Burglary | JohnCalls=true, MaryCalls=false) = <", mean, ", ", f_mean, ">")
+
+    mcmc = MCMC({'J': 1.})
+    mcmc.graph.node_dict['M'].observed = False
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'B')
+    print("P(Burglary | JohnCalls=true) = <", mean, ", ", f_mean, ">")
+
+    mcmc = MCMC({'M': 1.})
+    mcmc.graph.node_dict['J'].observed = False
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'B')
+    print("P(Burglary | MaryCalls=true) = <", mean, ", ", f_mean, ">")
 
 if __name__ == '__main__':
     main()
