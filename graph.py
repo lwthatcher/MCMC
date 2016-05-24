@@ -1,3 +1,5 @@
+import numpy as np
+
 class Graph:
 
     def __init__(self, connections, nodes):
@@ -48,7 +50,20 @@ class Node:
             return 'f'
 
     def sample(self):
-        pass
+        self._val = 1
+        pos = self.lookup_probability()
+        for child in self.children:
+            pos *= child.lookup_probability()
+
+        self._val = 0
+        neg = self.lookup_probability()
+        for child in self.children:
+            neg *= child.lookup_probability()
+
+        p = pos / (pos + neg)
+        out = np.random.binomial(1, p)
+        self._val = out
+        return out
 
     def lookup_probability(self):
         given = self._parent_values()
