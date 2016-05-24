@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Graph:
 
     def __init__(self, connections, nodes):
@@ -15,6 +16,11 @@ class Graph:
         for node, children in self.connections.items():
             for child in children:
                 self.inv_connections[child] = self.inv_connections.setdefault(child, []) + [node]
+
+        self.hidden_nodes = []
+        for node in self.nodes:
+            if not node.observed:
+                self.hidden_nodes.append(node)
 
 
 class Node:
