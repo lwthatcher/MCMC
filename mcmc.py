@@ -2,6 +2,7 @@
 import numpy as np
 from networks import alarm
 from networks import burn
+from networks import thomas
 
 class MCMC:
 
@@ -69,6 +70,13 @@ def main():
     samples = mcmc.gibbs(10000, 10000)
     mean, f_mean = sample_dim(samples, 'M')
     print("P(MapoDoufu | Burn=false) = <", mean, ", ", f_mean, ">")
+
+    graph = thomas()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'M')
+    print("P(Cross | Thomas=true, Percy=true, Diesel=true) = <", mean, ", ", f_mean, ">")
+
 
 if __name__ == '__main__':
     main()
