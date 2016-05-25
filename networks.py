@@ -75,3 +75,33 @@ def thomas():
                                ('ConfusionDelay', ['Cross'])])
 
     return Graph(connections, nodes)
+
+
+def home_or_school():
+    nodes = [Node('BC', {(): 0.68}),
+             Node('SFB', {(): 0.5}),
+             Node('AH', {(1,): 0.8, (0,): 0.7}),
+             Node('AS', {(1,): 0.4, (0,): 0.6}),
+             Node('IA', {(1, 1): 0.01, (1, 0): 0.24, (0, 1): 0.63, (0, 0): 0.95}, val=0., observed=True),
+             Node('LO', {(1, 1): 0.96, (1, 0): 0.73, (0, 1): 0.14, (0, 0): 0.02}, val=0.)]
+    connections = OrderedDict([('SFB', ['AH', 'AS']),
+                               ('AH', ['IA']),
+                               ('AS', ['IA']),
+                               ('IA', ['LO']),
+                               ('BC', ['LO'])])
+
+    return Graph(connections, nodes)
+
+
+def dirty_roommates():
+    nodes = [Node('DR', {(): 0.7}, val=0., observed=True),
+             Node('IT', {(): 0.8}),
+             Node('CC', {(): 0.09}),
+             Node('SDD', {(1, 1): 0.8, (1, 0): 0.4, (0, 1): 0.6, (0, 0): 0.9}, val=0.),
+             Node('CK', {(1, 1): 0.99, (1, 0): 0.7, (0, 1): 0.5, (0, 0): 0.05}, val=1.)]
+    connections = OrderedDict([('DR', ['SDD']),
+                               ('IT', ['SDD']),
+                               ('SDD', ['CK']),
+                               ('CC', ['CK'])])
+
+    return Graph(connections, nodes)

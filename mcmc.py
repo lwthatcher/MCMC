@@ -1,8 +1,7 @@
 
 import numpy as np
-from networks import alarm
-from networks import burn
-from networks import thomas
+from networks import *
+
 
 class MCMC:
 
@@ -64,12 +63,14 @@ def main():
     samples = mcmc.gibbs(10000, 10000)
     mean, f_mean = sample_dim(samples, 'B')
     print("P(Burglary | MaryCalls=true) = <", mean, ", ", f_mean, ">")
+    print()
 
     graph = burn()
     mcmc = MCMC(graph=graph)
     samples = mcmc.gibbs(10000, 10000)
     mean, f_mean = sample_dim(samples, 'M')
     print("P(MapoDoufu | Burn=false) = <", mean, ", ", f_mean, ">")
+    print()
 
     graph = thomas()
     mcmc = MCMC(graph=graph)
@@ -94,7 +95,34 @@ def main():
     samples = mcmc.gibbs(10000, 10000)
     mean, f_mean = sample_dim(samples, 'Diesel')
     print("P(Diesel | Cross=true) = <", mean, ", ", f_mean, ">")
+    print()
 
+    graph = home_or_school()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'AS')
+    print("P(AS | IA=false) = <", mean, ", ", f_mean, ">")
+
+    graph = home_or_school()
+    mcmc = MCMC({'IA': 1}, graph=graph)
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'AS')
+    print("P(AS | IA=false) = <", mean, ", ", f_mean, ">")
+    print()
+
+    graph = dirty_roommates()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'CK')
+    print("P(CK | DR=false) = <", mean, ", ", f_mean, ">")
+
+    graph = dirty_roommates()
+    graph.node_dict['DR'].observed = False
+    graph.node_dict['CK'].observed = True
+    mcmc = MCMC({'CK': 1}, graph=graph)
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'IT')
+    print("P(IT | CK=true) = <", mean, ", ", f_mean, ">")
 
 if __name__ == '__main__':
     main()
