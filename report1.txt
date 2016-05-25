@@ -1,0 +1,125 @@
+For each of the following I used a 10,000 burn period, then took 10,000 samples.
+I list the results first, then specify the networks below.
+
+# Results:
+## Burglar Alarm
+P(Burglary | JohnCalls=true, MaryCalls=true) = < 0.2862 ,  0.7138 >
+P(Alarm | JohnCalls=true, MaryCalls=true) = < 0.7586 ,  0.2414 >
+P(Earthquake | JohnCalls=true, MaryCalls=true) = < 0.1781 ,  0.8219 >
+P(Burglary | JohnCalls=true, MaryCalls=false) = < 0.004 ,  0.996 >
+P(Burglary | JohnCalls=true) = < 0.0178 ,  0.9822 >
+P(Burglary | MaryCalls=true) = < 0.0566 ,  0.9434 >
+
+## My Network
+P(Cross | Diesel=true, Diesel10=true) = < 0.3417 ,  0.6583 >
+P(Cross | Thomas=true) = < 0.1732 ,  0.8268 >
+P(Diesel | Cross=true) = < 0.5777 ,  0.4223 >
+
+## Nozomu's Network
+P(MapoDoufu | Burn=false) = < 0.2695 ,  0.7305 >
+
+## Steven's Network
+P(AS | IA=false) = < 0.5837 ,  0.4163 >
+P(AS | IA=false) = < 0.2972 ,  0.7028 >
+
+## Jared's Network
+P(CK | DR=false) = < 0.5106 ,  0.4894 >
+P(IT | CK=true) = < 0.8367 ,  0.1633 >
+
+#Networks:
+## Thomas (mine)
+P(Thomas=t) = 0.85
+P(Percy=t) = 0.45
+P(Diesel=t) = 0.3
+P(Diesel10=t) = 0.1
+P(BadAdvice=t | Diesel=t, Diesel10=t) = 0.99
+P(BadAdvice=t | Diesel=t, Diesel10=f) = 0.89
+P(BadAdvice=t | Diesel=f, Diesel10=t) = 0.92
+P(BadAdvice=t | Diesel=f, Diesel10=f) = 0.2
+P(Fire=t | Diesel10=t) = 0.03
+P(Fire=t | Diesel10=f) = 0.001
+P(ThomasRationalizes=t | BadAdvice=t) = 0.6
+P(ThomasRationalizes=t | BadAdvice=f) = 0.1
+P(PercyRationalizes=t | Thomas=t, BadAdvice=t) = 0.2
+P(PercyRationalizes=t | Thomas=t, BadAdvice=f) = 0.01
+P(PercyRationalizes=t | Thomas=f, BadAdvice=t) = 0.5
+P(PercyRationalizes=t | Thomas=f, BadAdvice=f) = 0.05
+P(Accident=t | ThomasRationalizes=t, PercyRationalizes=t, Diesel=t) = .87
+P(Accident=t | ThomasRationalizes=t, PercyRationalizes=t, Diesel=f) = .45
+P(Accident=t | ThomasRationalizes=t, PercyRationalizes=f, Diesel=t) = .5
+P(Accident=t | ThomasRationalizes=t, PercyRationalizes=f, Diesel=f) = .1
+P(Accident=t | ThomasRationalizes=f, PercyRationalizes=t, Diesel=t) = .32
+P(Accident=t | ThomasRationalizes=f, PercyRationalizes=t, Diesel=f) = .07
+P(Accident=t | ThomasRationalizes=f, PercyRationalizes=f, Diesel=t) = .2
+P(Accident=t | ThomasRationalizes=f, PercyRationalizes=f, Diesel=f) = .03
+P(ReallyUseful=t | Thomas=t, Percy=t, Accident=t) = 0.2
+P(ReallyUseful=t | Thomas=t, Percy=t, Accident=f) = 0.9
+P(ReallyUseful=t | Thomas=t, Percy=f, Accident=t) = 0.05
+P(ReallyUseful=t | Thomas=t, Percy=f, Accident=f) = 0.6
+P(ReallyUseful=t | Thomas=f, Percy=t, Accident=t) = 0.03
+P(ReallyUseful=t | Thomas=f, Percy=t, Accident=f) = 0.55
+P(ReallyUseful=t | Thomas=f, Percy=f, Accident=t) = 0.03
+P(ReallyUseful=t | Thomas=f, Percy=f, Accident=f) = 0.5
+P(ConfusionDelay=t | Accident=t, Fire=t) = .999
+P(ConfusionDelay=t | Accident=t, Fire=f) = .69
+P(ConfusionDelay=t | Accident=f, Fire=t) = .9
+P(ConfusionDelay=t | Accident=f, Fire=f) = .02
+P(Cross=t | ReallyUseful=t, ConfusionDelay=t) = 0.55
+P(Cross=t | ReallyUseful=t, ConfusionDelay=f) = 0.01
+P(Cross=t | ReallyUseful=f, ConfusionDelay=t) = 0.9
+P(Cross=t | ReallyUseful=f, ConfusionDelay=f) = 0.15
+
+## Burn (Nozomu)
+P(AdobadoBurrito=true) = 0.05
+P(PadKaPrao=true) = 0.01
+P(MapoDoufu=true) = 0.3
+P(Burn=true | AdobadoBurrito=true, PadKaPrao=true, MapoDoufu=true) = 0.9
+P(Burn=true | AdobadoBurrito=true, PadKaPrao=true, MapoDoufu=false) = 0.8
+P(Burn=true | AdobadoBurrito=true, PadKaPrao=false, MapoDoufu=true) = 0.7
+P(Burn=true | AdobadoBurrito=true, PadKaPrao=false, MapoDoufu=false) = 0.3
+P(Burn=true | AdobadoBurrito=false, PadKaPrao=true, MapoDoufu=true) = 0.55
+P(Burn=true | AdobadoBurrito=false, PadKaPrao=true, MapoDoufu=false) = 0.5
+P(Burn=true | AdobadoBurrito=false, PadKaPrao=false, MapoDoufu=true) = 0.2
+P(Burn=true | AdobadoBurrito=false, PadKaPrao=false, MapoDoufu=false) = 0.01
+
+## Home or School? (Steven)
+SFB = Surfing Facebook,
+AH = At Home,
+AS = At School,
+IA = I'm awake,
+BC = Birds Chirping,
+LO = Light Outside
+
+P(SFB=true) = 0.5
+P(AH=true | SFB=true) = 0.8
+P(AH=true | SFB=false) = 0.7
+P(AS=true | SFB=true) = 0.4
+P(AS=true | SFB=false) = 0.6
+P(IA=true | AH=true, AS=true) = 0.01
+P(IA=true | AH=true, AS=false) = 0.24
+P(IA=true | AH=false, AS=true) = 0.63
+P(IA=true | AH=false, AS=false) = 0.95
+P(BC=true) = 0.68
+P(LO=true | IA=true, BC=true) = 0.96
+P(LO=true | IA=false, BC=true) = 0.73
+P(LO=true | IA=true, BC=false) = 0.14
+P(LO=true | IA=false, BC=false) = 0.02
+
+## Dirty Roommates (Jared)
+DR = Dirty Roommates
+IT = I'm Tired
+SDD = someone has done dishes lately
+CC = cleaning checks in the last 3 days
+CK = clean kitchen
+
+P(DR = True) = .7
+P(IT = True) = .8
+P(SDD = True | DR = True, IT = True) = .8
+P(SDD = True | DR = True, IT = False) = .4
+P(SDD = True | DR = False, IT = True) = .6
+P(SDD = True | DR = False, IT = False) = .9
+P(CC = True) = .09
+P(CK = True | SDD = True, CC = True) = .99
+P(CK = True | SDD = True, CC = False) = .7
+P(CK = True | SDD = False, CC = True) = .5
+P(CK = True | SDD = False, CC = False) = .05
