@@ -74,8 +74,26 @@ def main():
     graph = thomas()
     mcmc = MCMC(graph=graph)
     samples = mcmc.gibbs(10000, 10000)
-    mean, f_mean = sample_dim(samples, 'M')
-    print("P(Cross | Thomas=true, Percy=true, Diesel=true) = <", mean, ", ", f_mean, ">")
+    mean, f_mean = sample_dim(samples, 'Cross')
+    print("P(Cross | Diesel=true, Diesel10=true) = <", mean, ", ", f_mean, ">")
+
+    graph = thomas()
+    graph.node_dict['Diesel'].observed = False
+    graph.node_dict['Diesel10'].observed = False
+    graph.node_dict['Thomas'].observed = True
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'Cross')
+    print("P(Cross | Thomas=true) = <", mean, ", ", f_mean, ">")
+
+    graph = thomas()
+    graph.node_dict['Diesel'].observed = False
+    graph.node_dict['Diesel10'].observed = False
+    graph.node_dict['Cross'].observed = True
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(10000, 10000)
+    mean, f_mean = sample_dim(samples, 'Diesel')
+    print("P(Diesel | Cross=true) = <", mean, ", ", f_mean, ">")
 
 
 if __name__ == '__main__':

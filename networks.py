@@ -35,10 +35,10 @@ def burn():
 
 
 def thomas():
-    nodes = [Node('Thomas', {(): 0.85}, val=1, observed=True),
-             Node('Percy', {(): 0.45}, val=1, observed=True),
+    nodes = [Node('Thomas', {(): 0.85}, val=1),
+             Node('Percy', {(): 0.45}, val=1),
              Node('Diesel', {(): 0.3}, val=1, observed=True),
-             Node('Diesel10', {(): 0.1}),
+             Node('Diesel10', {(): 0.1}, val=1, observed=True),
              Node('BadAdvice', {(1, 1): 0.99, (1, 0): 0.89, (0, 1): 0.92, (0, 0): 0.2}, val=0.),
              Node('Fire', {(1,): 0.03, (0,): 0.001}),
              Node('ThomasRationalizes', {(1,): 0.6, (0,): 0.1}),
@@ -67,12 +67,11 @@ def thomas():
                                ('BadAdvice', ['ThomasRationalizes', 'PercyRationalizes']),
                                ('ThomasRationalizes', ['Accident']),
                                ('PercyRationalizes', ['Accident']),
-                               ('Diesel', ['BadAdvice']),
+                               ('Diesel', ['BadAdvice', 'Accident']),
                                ('Diesel10', ['BadAdvice', 'Fire']),
                                ('Accident', ['ReallyUseful', 'ConfusionDelay']),
                                ('Fire', ['ConfusionDelay']),
                                ('ReallyUseful', ['Cross']),
-                               ('ConfusionDelay', ['Cross']),
-                               ])
+                               ('ConfusionDelay', ['Cross'])])
 
     return Graph(connections, nodes)
