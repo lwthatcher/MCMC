@@ -37,7 +37,7 @@ def sample_dim(samples, dim):
     return true_mean, false_mean
 
 
-def main():
+def lab1_tests():
     mcmc = MCMC()
     samples = mcmc.gibbs(10000, 10000)
     mean, f_mean = sample_dim(samples, 'B')
@@ -47,7 +47,7 @@ def main():
     mean, f_mean = sample_dim(samples, 'E')
     print("P(Earthquake | JohnCalls=true, MaryCalls=true) = <", mean, ", ", f_mean, ">")
 
-    mcmc = MCMC({'J':1., 'M':0.})
+    mcmc = MCMC({'J': 1., 'M': 0.})
     samples = mcmc.gibbs(10000, 10000)
     mean, f_mean = sample_dim(samples, 'B')
     print("P(Burglary | JohnCalls=true, MaryCalls=false) = <", mean, ", ", f_mean, ">")
@@ -123,6 +123,11 @@ def main():
     samples = mcmc.gibbs(10000, 10000)
     mean, f_mean = sample_dim(samples, 'IT')
     print("P(IT | CK=true) = <", mean, ", ", f_mean, ">")
+
+
+def main():
+    lab1_tests()
+
 
 if __name__ == '__main__':
     main()
