@@ -28,10 +28,9 @@ class Graph:
 
 class Node:
 
-    def __init__(self, name, probs, graph=None, val=1, observed=False):
+    def __init__(self, name, graph=None, val=1, observed=False):
         self.name = name
         self._graph = graph
-        self._probs = probs
         self._val = val
         self.observed = observed
 
@@ -53,10 +52,26 @@ class Node:
 
     @property
     def value(self):
+        return str(self._val)
+
+
+class BinaryNode(Node):
+
+    def __init__(self, name, probs, graph=None, val=1, observed=False):
+        super().__init__(name, graph=graph, val=1, observed=False)
+        self._probs = probs
+
+    def lookup_probability(self):
+        given = self._parent_values()
+        prob = self._probs[given]
         if self._val == 1:
-            return 't'
+            return prob
         else:
-            return 'f'
+            return 1.0 - prob
+
+    def _parent_values(self):
+        l = [p._val for p in self.parents]
+        return tuple(l)
 
     def sample(self):
         self._val = 1
@@ -74,14 +89,9 @@ class Node:
         self._val = out
         return out
 
-    def lookup_probability(self):
-        given = self._parent_values()
-        prob = self._probs[given]
+    @property
+    def value(self):
         if self._val == 1:
-            return prob
+            return 't'
         else:
-            return 1.0-prob
-
-    def _parent_values(self):
-        l = [p._val for p in self.parents]
-        return tuple(l)
+            return 'f'
