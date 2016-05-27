@@ -2,6 +2,8 @@
 import numpy as np
 from networks import *
 import matplotlib.pyplot as plt
+import matplotlib.pylab as mlab
+
 
 class MCMC:
 
@@ -41,6 +43,37 @@ def mixing_plot(samples, dim):
     xs, ys = zip(*enumerate([s[dim] for s in samples]))
     plt.plot(xs, ys)
     plt.title('{} mixing'.format(dim))
+    plt.show()
+
+
+def mean_prior_pdf(x):
+    """Compute the Normal pdf at `x` given the priors."""
+    mean = 5
+    var = 1/9
+    return ((1 / (2 * math.pi * var) ** 0.5) *
+        math.exp(-1 / (2 * var) * (x - mean) ** 2))
+
+
+def var_prior_pdf(x):
+    """Compute the Inverse Gamma pdf at `x` given the priors.
+
+    Note that we use the scale parameterization of `beta`.
+    """
+    alpha = 11
+    beta = 2.5
+    return beta ** alpha / math.gamma(alpha) * x**(-alpha - 1) * math.exp(-beta / x)
+
+
+def plotposterior(samples, prior_pdf, name, xmin, xmax):
+    xs = mlab.frange(xmin, xmax, (xmax-xmin) / 100)
+    ys = [prior_pdf(x) for x in xs]
+    plt.plot(xs, ys, label='Prior Dist')
+
+    plt.hist(samples, bins=30, normed=True, label='Posterior Dist')
+
+    plt.title('Prior and Posterior of {}'.format(name))
+    plt.ylim(ymin=0)
+    plt.xlim(xmin, xmax)
     plt.show()
 
 
@@ -135,9 +168,11 @@ def lab1_tests():
 def faculty_evaluation_tests():
     graph = faculty_evals()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(10, 1000)
+    samples = mcmc.gibbs(50, 10000)
     mixing_plot(samples, 'mu')
     mixing_plot(samples, 'sigma2')
+    plotposterior([s['mu'] for s in samples], mean_prior_pdf, 'mean', 5.0, 6.5)
+    plotposterior([s['sigma2'] for s in samples], var_prior_pdf, 'var', 0.0001, 1.0)
 
 
 def main():
