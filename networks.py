@@ -104,3 +104,16 @@ def dirty_roommates():
                                ('CC', ['CK'])])
 
     return Graph(connections, nodes)
+
+
+def faculty_evals():
+    scores = [6.39,6.32,6.25,6.24,6.21,6.18,6.17,6.13,6.00,6.00,5.97,5.82,5.81,5.71,5.55,5.50,5.39,5.37,5.35,5.30,5.27,4.94,4.50]
+
+    plate_nodes = [NormalNode('x' + str(i), 'mu', 'sigma2', val=score, observed=True) for i, score in enumerate(scores)]
+
+    nodes = [NormalNode('mu', 5., 1/9, cand_var=0.2, val=5.),
+             InverseGammaNode('sigma2', 11., 2.5, cand_var=0.15, val=0.3)] + plate_nodes
+    connections = OrderedDict([('mu', ['x' + str(i) for i in range(len(scores))]),
+                               ('sigma2', ['x' + str(i) for i in range(len(scores))])])
+
+    return Graph(connections, nodes)
