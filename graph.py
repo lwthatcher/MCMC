@@ -1,5 +1,6 @@
 import numpy as np
 import math
+from scipy.stats import norm
 
 class Graph:
 
@@ -131,3 +132,17 @@ class MetropolisNode(Node):
             self._val = cand
         else:
             self._val = last
+
+
+class NormalNode(MetropolisNode):
+    def __init__(self, name, mean, var, **kwargs):
+        super().__init__(name, **kwargs)
+        self.mean = mean
+        self.var = var
+
+    @property
+    def stdev(self):
+        return math.sqrt(self.var)
+
+    def lookup_probability(self):
+        return norm.logpdf(self.value, loc=self.mean, scale=self.stdev)
