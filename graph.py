@@ -1,6 +1,7 @@
 import numpy as np
 import math
 from scipy.stats import norm
+from scipy.special import gammaln
 
 class Graph:
 
@@ -114,8 +115,9 @@ class MetropolisNode(Node):
         sigma = math.sqrt(self.cd_params[1])
         return np.random.normal(mu, sigma)
 
-    def sample(self):
-        cand = self.get_candidate_value()
+    def sample(self, cand=None):
+        if cand is None:
+            cand = self.get_candidate_value()
         last = self._val
 
         fxt = self.lookup_probability()
@@ -133,6 +135,8 @@ class MetropolisNode(Node):
         else:
             self._val = last
 
+        return self._val
+
 
 class NormalNode(MetropolisNode):
     def __init__(self, name, mean, var, **kwargs):
@@ -146,3 +150,21 @@ class NormalNode(MetropolisNode):
 
     def lookup_probability(self):
         return norm.logpdf(self.value, loc=self.mean, scale=self.stdev)
+
+
+class InverseGammaNode(MetropolisNode):
+    def __init__(self, name, alpha, beta, **kwargs):
+        super().__init__(name, **kwargs)
+        self.alpha = alpha
+        self.beta = beta
+
+    def sample(self, cand=None):
+        cand = self.get_candidate_value()
+        if cand <= 0:
+            return self._val
+        return super().sample(cand)
+
+    def lookup_probability(self):
+        # TODO: try using the scipy logpdf code?
+        x = self._val
+        return self.alpha * np.log(self.beta) - gammaln(self.alpha) - ((self.alpha+1) * np.log(x)) - (self.beta/x)
