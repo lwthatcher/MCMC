@@ -1,7 +1,7 @@
 
 import numpy as np
 from networks import *
-
+import matplotlib.pyplot as plt
 
 class MCMC:
 
@@ -35,6 +35,13 @@ def sample_dim(samples, dim):
     true_mean = np.mean(d)
     false_mean = 1 - true_mean
     return true_mean, false_mean
+
+
+def mixing_plot(samples, dim):
+    xs, ys = zip(*enumerate([s[dim] for s in samples]))
+    plt.plot(xs, ys)
+    plt.title('{} mixing'.format(dim))
+    plt.show()
 
 
 def lab1_tests():
@@ -129,7 +136,9 @@ def faculty_evaluation_tests():
     graph = faculty_evals()
     mcmc = MCMC(graph=graph)
     samples = mcmc.gibbs(10, 1000)
-    print('woohoo!')
+    mixing_plot(samples, 'mu')
+    mixing_plot(samples, 'sigma2')
+
 
 def main():
     # lab1_tests()
