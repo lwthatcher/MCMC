@@ -125,8 +125,15 @@ def lab1_tests():
     print("P(IT | CK=true) = <", mean, ", ", f_mean, ">")
 
 
+def faculty_evaluation_tests():
+    graph = faculty_evals()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(10, 1000)
+    print('woohoo!')
+
 def main():
-    lab1_tests()
+    # lab1_tests()
+    faculty_evaluation_tests()
 
 
 if __name__ == '__main__':

@@ -140,17 +140,10 @@ class MetropolisNode(Node):
         return self._val
 
     def parameter(self, param):
-        if isinstance(param, numbers.Number):
-            return param
-        if isinstance(param, str):
-            return self._graph.node_dict[param]
-        else:
-            return param
-
-    @classmethod
-    def handle_param(cls, param):
         if isinstance(param, Node):
             return param._val
+        elif isinstance(param, str):
+            return self._graph.node_dict[param]._val
         else:
             return param
 
@@ -158,34 +151,35 @@ class MetropolisNode(Node):
 class NormalNode(MetropolisNode):
     def __init__(self, name, mean, var, **kwargs):
         super().__init__(name, **kwargs)
-        self._mean = self.parameter(mean)
-        self._var = self.parameter(var)
+        self._mean = mean
+        self._var = var
 
     @property
     def mean(self):
-        return self.handle_param(self._mean)
+        return self.parameter(self._mean)
 
     @property
-    def stdev(self):
-        return math.sqrt(self.handle_param(self._var))
+    def var(self):
+        return self.parameter(self._var)
 
     def lookup_probability(self):
-        return norm.logpdf(self.value, loc=self.mean, scale=self.stdev)
+        x = self._val
+        return -1/2 * (np.log(self.var) + 1/self.var * (x - self.mean)**2)
 
 
 class InverseGammaNode(MetropolisNode):
     def __init__(self, name, alpha, beta, **kwargs):
         super().__init__(name, **kwargs)
-        self._alpha = self.parameter(alpha)
-        self._beta = self.parameter(beta)
+        self._alpha = alpha
+        self._beta = beta
 
     @property
     def alpha(self):
-        return self.handle_param(self._alpha)
+        return self.parameter(self._alpha)
 
     @property
     def beta(self):
-        return self.handle_param(self._beta)
+        return self.parameter(self._beta)
 
     def sample(self, cand=None):
         cand = self.get_candidate_value()
