@@ -1,5 +1,5 @@
 import numpy as np
-
+import math
 
 class Graph:
 
@@ -40,6 +40,9 @@ class Node:
     def __repr__(self):
         return "(" + self.name + "=" + self.value + ")"
 
+    def lookup_probability(self):
+        return 0
+
     @property
     def parents(self):
         p = self._graph.inv_connections.get(self.name, [])
@@ -57,8 +60,8 @@ class Node:
 
 class BinaryNode(Node):
 
-    def __init__(self, name, probs, graph=None, val=1, observed=False):
-        super().__init__(name, graph=graph, val=val, observed=observed)
+    def __init__(self, name, probs, **kwargs):
+        super().__init__(name, **kwargs)
         self._probs = probs
 
     def lookup_probability(self):
@@ -95,3 +98,36 @@ class BinaryNode(Node):
             return 't'
         else:
             return 'f'
+
+
+class MetropolisNode(Node):
+
+    def __init__(self, name, cand_dist=None, **kwargs):
+        super().__init__(name, **kwargs)
+        if cand_dist is None:
+            cand_dist = [0, 1]
+        self.cd_params = cand_dist
+
+    def get_candidate_value(self):
+        mu = self.cd_params[0]
+        sigma = math.sqrt(self.cd_params[1])
+        return np.random.normal(mu, sigma)
+
+    def sample(self):
+        cand = self.get_candidate_value()
+        last = self._val
+
+        fxt = self.lookup_probability()
+        for child in self.children:
+            fxt += child.lookup_probability()
+
+        self._val = cand
+        fxs = self.lookup_probability()
+        for child in self.children:
+            fxs += child.lookup_probability()
+
+        u = np.random.uniform()
+        if u < fxs - fxt:
+            self._val = cand
+        else:
+            self._val = last
