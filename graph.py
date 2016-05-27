@@ -1,7 +1,9 @@
 import numpy as np
+import numbers
 import math
 from scipy.stats import norm
 from scipy.special import gammaln
+
 
 class Graph:
 
@@ -104,15 +106,15 @@ class BinaryNode(Node):
 
 class MetropolisNode(Node):
 
-    def __init__(self, name, cand_dist=None, **kwargs):
+    def __init__(self, name, cand_var=None, **kwargs):
         super().__init__(name, **kwargs)
-        if cand_dist is None:
-            cand_dist = [0, 1]
-        self.cd_params = cand_dist
+        if cand_var is None:
+            cand_var = 1.
+        self.cd_var = cand_var
 
     def get_candidate_value(self):
-        mu = self.cd_params[0]
-        sigma = math.sqrt(self.cd_params[1])
+        mu = self._val
+        sigma = math.sqrt(self.cd_var)
         return np.random.normal(mu, sigma)
 
     def sample(self, cand=None):
@@ -137,16 +139,35 @@ class MetropolisNode(Node):
 
         return self._val
 
+    def parameter(self, param):
+        if isinstance(param, numbers.Number):
+            return param
+        if isinstance(param, str):
+            return self._graph.node_dict[param]
+        else:
+            return param
+
+    @classmethod
+    def handle_param(cls, param):
+        if isinstance(param, Node):
+            return param._val
+        else:
+            return param
+
 
 class NormalNode(MetropolisNode):
     def __init__(self, name, mean, var, **kwargs):
         super().__init__(name, **kwargs)
-        self.mean = mean
-        self.var = var
+        self._mean = self.parameter(mean)
+        self._var = self.parameter(var)
+
+    @property
+    def mean(self):
+        return self.handle_param(self._mean)
 
     @property
     def stdev(self):
-        return math.sqrt(self.var)
+        return math.sqrt(self.handle_param(self._var))
 
     def lookup_probability(self):
         return norm.logpdf(self.value, loc=self.mean, scale=self.stdev)
@@ -155,8 +176,16 @@ class NormalNode(MetropolisNode):
 class InverseGammaNode(MetropolisNode):
     def __init__(self, name, alpha, beta, **kwargs):
         super().__init__(name, **kwargs)
-        self.alpha = alpha
-        self.beta = beta
+        self._alpha = self.parameter(alpha)
+        self._beta = self.parameter(beta)
+
+    @property
+    def alpha(self):
+        return self.handle_param(self._alpha)
+
+    @property
+    def beta(self):
+        return self.handle_param(self._beta)
 
     def sample(self, cand=None):
         cand = self.get_candidate_value()

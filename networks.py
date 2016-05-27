@@ -113,6 +113,7 @@ def faculty_evals():
 
     nodes = [NormalNode('mu', 5., 1/9, cand_var=0.2, val=5.),
              InverseGammaNode('sigma2', 11., 2.5, cand_var=0.15, val=0.3)] + plate_nodes
+
     connections = OrderedDict([('mu', ['x' + str(i) for i in range(len(scores))]),
                                ('sigma2', ['x' + str(i) for i in range(len(scores))])])
 
