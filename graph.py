@@ -131,7 +131,7 @@ class MetropolisNode(Node):
         for child in self.children:
             fxs += child.lookup_probability()
 
-        u = np.random.uniform()
+        u = np.log(np.random.uniform())
         if u < fxs - fxt:
             self._val = cand
         else:
