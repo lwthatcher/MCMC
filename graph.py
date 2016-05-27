@@ -58,7 +58,7 @@ class Node:
 class BinaryNode(Node):
 
     def __init__(self, name, probs, graph=None, val=1, observed=False):
-        super().__init__(name, graph=graph, val=1, observed=False)
+        super().__init__(name, graph=graph, val=val, observed=observed)
         self._probs = probs
 
     def lookup_probability(self):
