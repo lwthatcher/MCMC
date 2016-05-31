@@ -140,15 +140,21 @@ def wacky():
 def golf():
     golfers = set()
     tournaments = set()
+    tour_connects = {}
     observations = []
     with open('golfers.csv', newline='') as golf_data:
         reader = csv.reader(golf_data, delimiter=' ')
-        for line in reader:
+        for i,line in enumerate(reader):
             golfer = line[0]
             score = line[1]
             tour = 't' + line[2]
+            name = 'obs' + str(i)
 
             golfers.add(golfer)
             tournaments.add(tour)
-            observations.append(((golfer, tour), score))
+            tour_connects[(tour, golfer)] = name
+            observations.append((name, score))
     print('read in golf data')
+
+    nodes = [NormalNode('hypertour-mean', 72, 2, val=72.8, cand_var=2),
+             InverseGammaNode('hypertour-var', 18, 0.015)]
