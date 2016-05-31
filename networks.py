@@ -121,10 +121,10 @@ def faculty_evals():
 
 
 def wacky():
-    b = lambda a: a**math.pi
+    b = lambda a: a._val**math.pi
     nodes = [NormalNode('A', 20.,1., val=20),
-             BetaNode('E', 1, 1, val=0.5),
-             GammaNode('B', Param(b, 'A'), 7, val=20),
+             BetaNode('E', 1, 1, val=0.5, cand_var=1/12),
+             GammaNode('B', Param(b, 'A'), 7, val=20, cand_var=0.5),
              BetaNode('D', 'A', 'B', val=0.5),
              BernoulliNode('C', BernoulliParam()),
              PoissonNode('F', 'D'),

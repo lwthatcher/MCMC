@@ -77,6 +77,13 @@ def plotposterior(samples, prior_pdf, name, xmin, xmax):
     plt.show()
 
 
+def plot_distribution(samples, dim):
+    samples = [s[dim] for s in samples]
+    plt.hist(samples, bins=40, normed=True, label='Posterior Dist')
+    plt.title('Posterior Distribution of {}'.format(dim))
+    plt.show()
+
+
 def lab1_tests():
     mcmc = MCMC()
     samples = mcmc.gibbs(10000, 10000)
@@ -175,12 +182,23 @@ def faculty_evaluation_tests():
     plotposterior([s['sigma2'] for s in samples], var_prior_pdf, 'var', 0.0001, 1.0)
 
 
+def wacky_network_tests():
+    graph = wacky()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(100, 10000)
+    for node in graph.nodes:
+        mixing_plot(samples, node.name)
+        plot_distribution(samples, node.name)
+
+
 def main(_tests):
     for test in _tests:
         if test == 'lab1':
             lab1_tests()
         elif test == 'faculty_eval':
             faculty_evaluation_tests()
+        elif test == 'wacky':
+            wacky_network_tests()
 
 
 if __name__ == '__main__':

@@ -269,6 +269,12 @@ class PoissonNode(MetropolisNode):
     def theta(self):
         return self.parameter(self._theta)
 
+    def sample(self, cand=None):
+        cand = self.get_candidate_value()
+        if cand <= 0:
+            return self._val
+        return super().sample(cand)
+
     def get_candidate_value(self):
         mu = self._val
         sigma = math.sqrt(self.cd_var)
