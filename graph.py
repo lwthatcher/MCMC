@@ -1,7 +1,5 @@
 import numpy as np
-import numbers
 import math
-from scipy.stats import norm
 from scipy.special import gammaln
 
 
@@ -72,9 +70,9 @@ class BernoulliNode(Node):
         given = self._parent_values()
         prob = self._probs[given]
         if self._val == 1:
-            return prob
+            return np.log(prob)
         else:
-            return 1.0 - prob
+            return np.log(1.0 - prob)
 
     def _parent_values(self):
         l = [p._val for p in self.parents]
@@ -84,15 +82,15 @@ class BernoulliNode(Node):
         self._val = 1
         pos = self.lookup_probability()
         for child in self.children:
-            pos *= child.lookup_probability()
+            pos += child.lookup_probability()
 
         self._val = 0
         neg = self.lookup_probability()
         for child in self.children:
-            neg *= child.lookup_probability()
+            neg += child.lookup_probability()
 
-        p = pos / (pos + neg)
-        out = np.random.binomial(1, p)
+        p = pos - np.logaddexp(pos, neg)
+        out = np.random.binomial(1, np.exp(p))
         self._val = out
         return out
 
