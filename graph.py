@@ -246,3 +246,22 @@ class BetaNode(MetropolisNode):
         alpha = self.alpha
         beta = self.beta
         return gammaln(alpha+beta) - gammaln(alpha) - gammaln(beta) + (alpha-1)*np.log(x) + (beta-1)*np.log(1-x)
+
+
+class PoissonNode(MetropolisNode):
+    def __init__(self, name, theta, **kwargs):
+        super().__init__(name, **kwargs)
+        self._theta = theta
+
+    @property
+    def theta(self):
+        return self.parameter(self._theta)
+
+    def get_candidate_value(self):
+        mu = self._val
+        sigma = math.sqrt(self.cd_var)
+        return round(np.random.normal(mu, sigma))
+
+    def lookup_probability(self):
+        x = self._val
+        return x*np.log(self.theta) - np.log(math.factorial(x)) - self.theta
