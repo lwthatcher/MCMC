@@ -1,5 +1,5 @@
 
-import numpy as np
+import argparse
 from networks import *
 import matplotlib.pyplot as plt
 import matplotlib.pylab as mlab
@@ -175,10 +175,20 @@ def faculty_evaluation_tests():
     plotposterior([s['sigma2'] for s in samples], var_prior_pdf, 'var', 0.0001, 1.0)
 
 
-def main():
-    # lab1_tests()
-    faculty_evaluation_tests()
+def main(_tests):
+    for test in _tests:
+        if test == 'lab1':
+            lab1_tests()
+        elif test == 'faculty_eval':
+            faculty_evaluation_tests()
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('tests', nargs='*')
+    args = parser.parse_args()
+    if args.tests:
+        tests = args.tests
+    else:
+        tests = ['faculty_eval']
+    main(tests)
