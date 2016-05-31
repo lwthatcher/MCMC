@@ -1,5 +1,6 @@
 from collections import OrderedDict
 from graph import *
+import csv
 
 
 def alarm():
@@ -134,3 +135,20 @@ def wacky():
                                ('D', ['C', 'F']),
                                ('F', ['G'])])
     return Graph(connections, nodes)
+
+
+def golf():
+    golfers = set()
+    tournaments = set()
+    observations = []
+    with open('golfers.csv', newline='') as golf_data:
+        reader = csv.reader(golf_data, delimiter=' ')
+        for line in reader:
+            golfer = line[0]
+            score = line[1]
+            tour = 't' + line[2]
+
+            golfers.add(golfer)
+            tournaments.add(tour)
+            observations.append(((golfer, tour), score))
+    print('read in golf data')

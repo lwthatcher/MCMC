@@ -191,6 +191,11 @@ def wacky_network_tests():
         plot_distribution(samples, node.name)
 
 
+def golfer_network_tests():
+    graph = golf()
+    mcmc = MCMC(graph=graph)
+
+
 def main(_tests):
     for test in _tests:
         if test == 'lab1':
@@ -199,6 +204,8 @@ def main(_tests):
             faculty_evaluation_tests()
         elif test == 'wacky':
             wacky_network_tests()
+        elif test == 'golf':
+            golfer_network_tests()
 
 
 if __name__ == '__main__':
