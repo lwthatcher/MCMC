@@ -185,7 +185,7 @@ def faculty_evaluation_tests():
 def wacky_network_tests():
     graph = wacky()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(100, 10000)
+    samples = mcmc.gibbs(100000, 10000)
     for node in graph.nodes:
         mixing_plot(samples, node.name)
         plot_distribution(samples, node.name)

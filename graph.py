@@ -249,7 +249,7 @@ class BetaNode(MetropolisNode):
 
     def sample(self, cand=None):
         cand = self.get_candidate_value()
-        if cand <= 0 or cand >= 1:
+        if cand <= 0 or cand > 1:
             return self._val
         return super().sample(cand)
 
