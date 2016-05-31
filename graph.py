@@ -108,6 +108,16 @@ class BernoulliParam:
         return item[0]
 
 
+class Param:
+    def __init__(self, func, args):
+        self._func = func
+        self._args = args
+
+    def __call__(self, graph):
+        nodes = [graph.node_dict[name] for name in self._args]
+        return self._func(*nodes)
+
+
 class MetropolisNode(Node):
 
     def __init__(self, name, cand_var=None, **kwargs):
@@ -148,6 +158,8 @@ class MetropolisNode(Node):
             return param._val
         elif isinstance(param, str):
             return self._graph.node_dict[param]._val
+        elif isinstance(param, Param):
+            return param(self._graph)
         else:
             return param
 
