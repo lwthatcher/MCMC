@@ -118,3 +118,19 @@ def faculty_evals():
                                ('sigma2', ['x' + str(i) for i in range(len(scores))])])
 
     return Graph(connections, nodes)
+
+
+def wacky():
+    b = lambda a: a**math.pi
+    nodes = [NormalNode('A', 20.,1., val=20),
+             BetaNode('E', 1, 1, val=0.5),
+             GammaNode('B', Param(b, 'A'), 7, val=20),
+             BetaNode('D', 'A', 'B', val=0.5),
+             BernoulliNode('C', BernoulliParam()),
+             PoissonNode('F', 'D'),
+             NormalNode('G', 'E', 'F', val=0.5)]
+    connections = OrderedDict([('A', ['B', 'D']),
+                               ('E', ['D', 'G']),
+                               ('D', ['C', 'F']),
+                               ('F', ['G'])])
+    return Graph(connections, nodes)
