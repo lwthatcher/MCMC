@@ -188,6 +188,30 @@ class InverseGammaNode(MetropolisNode):
         return super().sample(cand)
 
     def lookup_probability(self):
-        # TODO: try using the scipy logpdf code?
         x = self._val
         return self.alpha * np.log(self.beta) - gammaln(self.alpha) - ((self.alpha+1) * np.log(x)) - (self.beta/x)
+
+
+class GammaNode(MetropolisNode):
+    def __init__(self, name, alpha, beta, **kwargs):
+        super().__init__(name, **kwargs)
+        self._alpha = alpha
+        self._beta = beta
+
+    @property
+    def alpha(self):
+        return self.parameter(self._alpha)
+
+    @property
+    def beta(self):
+        return self.parameter(self._beta)
+
+    def sample(self, cand=None):
+        cand = self.get_candidate_value()
+        if cand <= 0:
+            return self._val
+        return super().sample(cand)
+
+    def lookup_probability(self):
+        x = self._val
+        return self.alpha * np.log(self.beta) - gammaln(self.alpha) + ((self.alpha - 1) * np.log(x)) - (self.beta * x)
