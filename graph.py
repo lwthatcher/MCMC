@@ -62,7 +62,7 @@ class Node:
         return str(self._val)
 
 
-class BinaryNode(Node):
+class BernoulliNode(Node):
 
     def __init__(self, name, probs, **kwargs):
         super().__init__(name, **kwargs)
@@ -102,6 +102,12 @@ class BinaryNode(Node):
             return 't'
         else:
             return 'f'
+
+
+class BernoulliParam:
+
+    def __getitem__(self, item):
+        return item[0]
 
 
 class MetropolisNode(Node):

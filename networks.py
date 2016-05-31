@@ -3,11 +3,11 @@ from graph import *
 
 
 def alarm():
-    nodes = [BinaryNode('B', {(): 0.001}, val=0.),
-             BinaryNode('E', {(): 0.002}, val=0.),
-             BinaryNode('A', {(1, 1): 0.95, (1, 0): 0.94, (0, 1): 0.29, (0, 0): 0.001}, val=0.),
-             BinaryNode('J', {(1,): 0.9, (0,): 0.05}, observed=True),
-             BinaryNode('M', {(1,): 0.7, (0,): 0.01}, observed=True)]
+    nodes = [BernoulliNode('B', {(): 0.001}, val=0.),
+             BernoulliNode('E', {(): 0.002}, val=0.),
+             BernoulliNode('A', {(1, 1): 0.95, (1, 0): 0.94, (0, 1): 0.29, (0, 0): 0.001}, val=0.),
+             BernoulliNode('J', {(1,): 0.9, (0,): 0.05}, observed=True),
+             BernoulliNode('M', {(1,): 0.7, (0,): 0.01}, observed=True)]
     connections = OrderedDict([('B', ['A']),
                                ('E', ['A']),
                                ('A', ['J', 'M'])])
@@ -15,17 +15,17 @@ def alarm():
 
 
 def burn():
-    nodes = [BinaryNode('A', {(): 0.05}),
-             BinaryNode('P', {(): 0.01}),
-             BinaryNode('M', {(): 0.3}),
-             BinaryNode('B', {(1, 1, 1): 0.9,
-                        (1, 1, 0): 0.8,
-                        (1, 0, 1): 0.7,
-                        (1, 0, 0): 0.3,
-                        (0, 1, 1): 0.55,
-                        (0, 1, 0): 0.5,
-                        (0, 0, 1): 0.9,
-                        (0, 0, 0): 0.9,}, observed=True, val=0.)]
+    nodes = [BernoulliNode('A', {(): 0.05}),
+             BernoulliNode('P', {(): 0.01}),
+             BernoulliNode('M', {(): 0.3}),
+             BernoulliNode('B', {(1, 1, 1): 0.9,
+                                 (1, 1, 0): 0.8,
+                                 (1, 0, 1): 0.7,
+                                 (1, 0, 0): 0.3,
+                                 (0, 1, 1): 0.55,
+                                 (0, 1, 0): 0.5,
+                                 (0, 0, 1): 0.9,
+                                 (0, 0, 0): 0.9,}, observed=True, val=0.)]
 
     connections = OrderedDict([('A', ['B']),
                                ('P', ['B']),
@@ -34,32 +34,32 @@ def burn():
 
 
 def thomas():
-    nodes = [BinaryNode('Thomas', {(): 0.85}, val=1),
-             BinaryNode('Percy', {(): 0.45}, val=1),
-             BinaryNode('Diesel', {(): 0.3}, val=1, observed=True),
-             BinaryNode('Diesel10', {(): 0.1}, val=1, observed=True),
-             BinaryNode('BadAdvice', {(1, 1): 0.99, (1, 0): 0.89, (0, 1): 0.92, (0, 0): 0.2}, val=0.),
-             BinaryNode('Fire', {(1,): 0.03, (0,): 0.001}),
-             BinaryNode('ThomasRationalizes', {(1,): 0.6, (0,): 0.1}),
-             BinaryNode('PercyRationalizes', {(1, 1): 0.2, (1, 0): 0.01, (0, 1): 0.5, (0, 0): 0.05}),
-             BinaryNode('Accident', {(1, 1, 1): 0.87,
-                               (1, 1, 0): 0.45,
-                               (1, 0, 1): 0.5,
-                               (1, 0, 0): 0.1,
-                               (0, 1, 1): 0.32,
-                               (0, 1, 0): 0.07,
-                               (0, 0, 1): 0.2,
-                               (0, 0, 0): 0.03}),
-             BinaryNode('ReallyUseful', {(1, 1, 1): 0.2,
-                                   (1, 1, 0): 0.9,
-                                   (1, 0, 1): 0.05,
-                                   (1, 0, 0): 0.6,
-                                   (0, 1, 1): 0.03,
-                                   (0, 1, 0): 0.55,
-                                   (0, 0, 1): 0.03,
-                                   (0, 0, 0): 0.5,}),
-             BinaryNode('ConfusionDelay', {(1, 1): 0.999, (1, 0): 0.69, (0, 1): 0.9, (0, 0): 0.02}),
-             BinaryNode('Cross', {(1, 1): 0.55, (1, 0): 0.01, (0, 1): 0.9, (0, 0): 0.15})]
+    nodes = [BernoulliNode('Thomas', {(): 0.85}, val=1),
+             BernoulliNode('Percy', {(): 0.45}, val=1),
+             BernoulliNode('Diesel', {(): 0.3}, val=1, observed=True),
+             BernoulliNode('Diesel10', {(): 0.1}, val=1, observed=True),
+             BernoulliNode('BadAdvice', {(1, 1): 0.99, (1, 0): 0.89, (0, 1): 0.92, (0, 0): 0.2}, val=0.),
+             BernoulliNode('Fire', {(1,): 0.03, (0,): 0.001}),
+             BernoulliNode('ThomasRationalizes', {(1,): 0.6, (0,): 0.1}),
+             BernoulliNode('PercyRationalizes', {(1, 1): 0.2, (1, 0): 0.01, (0, 1): 0.5, (0, 0): 0.05}),
+             BernoulliNode('Accident', {(1, 1, 1): 0.87,
+                                        (1, 1, 0): 0.45,
+                                        (1, 0, 1): 0.5,
+                                        (1, 0, 0): 0.1,
+                                        (0, 1, 1): 0.32,
+                                        (0, 1, 0): 0.07,
+                                        (0, 0, 1): 0.2,
+                                        (0, 0, 0): 0.03}),
+             BernoulliNode('ReallyUseful', {(1, 1, 1): 0.2,
+                                            (1, 1, 0): 0.9,
+                                            (1, 0, 1): 0.05,
+                                            (1, 0, 0): 0.6,
+                                            (0, 1, 1): 0.03,
+                                            (0, 1, 0): 0.55,
+                                            (0, 0, 1): 0.03,
+                                            (0, 0, 0): 0.5,}),
+             BernoulliNode('ConfusionDelay', {(1, 1): 0.999, (1, 0): 0.69, (0, 1): 0.9, (0, 0): 0.02}),
+             BernoulliNode('Cross', {(1, 1): 0.55, (1, 0): 0.01, (0, 1): 0.9, (0, 0): 0.15})]
 
     connections = OrderedDict([('Thomas', ['PercyRationalizes', 'ReallyUseful']),
                                ('Percy', ['ReallyUseful']),
@@ -77,12 +77,12 @@ def thomas():
 
 
 def home_or_school():
-    nodes = [BinaryNode('BC', {(): 0.68}),
-             BinaryNode('SFB', {(): 0.5}),
-             BinaryNode('AH', {(1,): 0.8, (0,): 0.7}),
-             BinaryNode('AS', {(1,): 0.4, (0,): 0.6}),
-             BinaryNode('IA', {(1, 1): 0.01, (1, 0): 0.24, (0, 1): 0.63, (0, 0): 0.95}, val=0., observed=True),
-             BinaryNode('LO', {(1, 1): 0.96, (1, 0): 0.73, (0, 1): 0.14, (0, 0): 0.02}, val=0.)]
+    nodes = [BernoulliNode('BC', {(): 0.68}),
+             BernoulliNode('SFB', {(): 0.5}),
+             BernoulliNode('AH', {(1,): 0.8, (0,): 0.7}),
+             BernoulliNode('AS', {(1,): 0.4, (0,): 0.6}),
+             BernoulliNode('IA', {(1, 1): 0.01, (1, 0): 0.24, (0, 1): 0.63, (0, 0): 0.95}, val=0., observed=True),
+             BernoulliNode('LO', {(1, 1): 0.96, (1, 0): 0.73, (0, 1): 0.14, (0, 0): 0.02}, val=0.)]
     connections = OrderedDict([('SFB', ['AH', 'AS']),
                                ('AH', ['IA']),
                                ('AS', ['IA']),
@@ -93,11 +93,11 @@ def home_or_school():
 
 
 def dirty_roommates():
-    nodes = [BinaryNode('DR', {(): 0.7}, val=0., observed=True),
-             BinaryNode('IT', {(): 0.8}),
-             BinaryNode('CC', {(): 0.09}),
-             BinaryNode('SDD', {(1, 1): 0.8, (1, 0): 0.4, (0, 1): 0.6, (0, 0): 0.9}, val=0.),
-             BinaryNode('CK', {(1, 1): 0.99, (1, 0): 0.7, (0, 1): 0.5, (0, 0): 0.05}, val=1.)]
+    nodes = [BernoulliNode('DR', {(): 0.7}, val=0., observed=True),
+             BernoulliNode('IT', {(): 0.8}),
+             BernoulliNode('CC', {(): 0.09}),
+             BernoulliNode('SDD', {(1, 1): 0.8, (1, 0): 0.4, (0, 1): 0.6, (0, 0): 0.9}, val=0.),
+             BernoulliNode('CK', {(1, 1): 0.99, (1, 0): 0.7, (0, 1): 0.5, (0, 0): 0.05}, val=1.)]
     connections = OrderedDict([('DR', ['SDD']),
                                ('IT', ['SDD']),
                                ('SDD', ['CK']),
