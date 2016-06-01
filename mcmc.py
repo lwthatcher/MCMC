@@ -62,6 +62,22 @@ def normal_expected_pdf(x):
         math.exp(-1 / (2 * var) * (x - mean) ** 2))
 
 
+def B(alpha, beta):
+    return (math.gamma(alpha) * math.gamma(beta)) / math.gamma(alpha + beta)
+
+
+def beta_pdf(x, alpha=3, beta=4):
+    return ((x ** (alpha-1)) * ((1-x)**(beta-1))) / B(alpha, beta)
+
+
+def beta_expected_t(x):
+    return beta_pdf(x, 3, 4)
+
+
+def beta_expected_f(x):
+    return beta_pdf(x, 3, 3)
+
+
 def var_prior_pdf(x):
     """Compute the Inverse Gamma pdf at `x` given the priors.
 
@@ -208,7 +224,19 @@ def normal_normal_tests():
     graph = normal_normal()
     mcmc = MCMC(graph=graph)
     samples = mcmc.gibbs(500, 10000)
-    plotposterior([s['A'] for s in samples], normal_expected_pdf, 'mean', -2, 2)
+    plotposterior([s['A'] for s in samples], normal_expected_pdf, 'normal-normal', -2, 2)
+
+
+def beta_bernoulli_tests():
+    graph = beta_bernoulli()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(500, 10000)
+    plotposterior([s['A'] for s in samples], beta_expected_t, 'beta-bernoulli', 0, 1)
+
+    graph = beta_bernoulli(b=0)
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(500, 10000)
+    plotposterior([s['A'] for s in samples], beta_expected_f, 'beta-bernoulli', 0, 1)
 
 
 def main(_tests):
@@ -223,6 +251,8 @@ def main(_tests):
             golfer_network_tests()
         elif test == 'normal_normal':
             normal_normal_tests()
+        elif test == 'beta_bernoulli':
+            beta_bernoulli_tests()
 
 
 if __name__ == '__main__':

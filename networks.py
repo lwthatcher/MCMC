@@ -160,9 +160,9 @@ def golf():
              InverseGammaNode('hypertour-var', 18, 0.015)]
 
 
-def beta_bernoulli():
+def beta_bernoulli(b=1):
     nodes = [BetaNode('A', 2., 3.),
-             BernoulliNode('B', BernoulliParam(), val=1, observed=True)]
+             BernoulliNode('B', BernoulliParam(), val=b, observed=True)]
     connections = OrderedDict([('A', ['B'])])
     return Graph(connections, nodes)
 
