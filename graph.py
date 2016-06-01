@@ -60,7 +60,7 @@ class Node:
         return str(self._val)
 
 
-class BernoulliNode(Node):
+class BinaryNode(Node):
 
     def __init__(self, name, probs, **kwargs):
         super().__init__(name, **kwargs)
