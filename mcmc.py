@@ -54,6 +54,14 @@ def mean_prior_pdf(x):
         math.exp(-1 / (2 * var) * (x - mean) ** 2))
 
 
+def normal_expected_pdf(x):
+    """Compute the Normal pdf at `x` given the priors."""
+    mean = -.4
+    var = .5
+    return ((1 / (2 * math.pi * var) ** 0.5) *
+        math.exp(-1 / (2 * var) * (x - mean) ** 2))
+
+
 def var_prior_pdf(x):
     """Compute the Inverse Gamma pdf at `x` given the priors.
 
@@ -196,6 +204,13 @@ def golfer_network_tests():
     mcmc = MCMC(graph=graph)
 
 
+def normal_normal_tests():
+    graph = normal_normal()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(500, 10000)
+    plotposterior([s['A'] for s in samples], normal_expected_pdf, 'mean', -2, 2)
+
+
 def main(_tests):
     for test in _tests:
         if test == 'lab1':
@@ -206,6 +221,8 @@ def main(_tests):
             wacky_network_tests()
         elif test == 'golf':
             golfer_network_tests()
+        elif test == 'normal_normal':
+            normal_normal_tests()
 
 
 if __name__ == '__main__':

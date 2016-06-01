@@ -158,3 +158,16 @@ def golf():
 
     nodes = [NormalNode('hypertour-mean', 72, 2, val=72.8, cand_var=2),
              InverseGammaNode('hypertour-var', 18, 0.015)]
+
+
+def beta_bernoulli():
+    nodes = []
+    pass
+
+
+def normal_normal():
+    mu = lambda a: a._val + 2
+    nodes = [NormalNode('A', 0., 1.),
+             NormalNode('B', Param(mu, 'A'), 1., val=1.2, observed=True)]
+    connections = OrderedDict([('A', ['B'])])
+    return Graph(connections, nodes)
