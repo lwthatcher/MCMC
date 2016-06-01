@@ -67,6 +67,7 @@ def B(alpha, beta):
 
 
 def beta_pdf(x, alpha=3, beta=4):
+    print(alpha, beta)
     return ((x ** (alpha-1)) * ((1-x)**(beta-1))) / B(alpha, beta)
 
 

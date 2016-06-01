@@ -118,6 +118,44 @@ class Param:
         return self._func(*nodes)
 
 
+class BernoulliNode(Node):
+    def __init__(self, name, prob, **kwargs):
+        super().__init__(name, **kwargs)
+        self._prob = prob
+
+    def lookup_probability(self):
+        prob = self.parameter(self._prob)
+        if self._val == 1:
+            return prob
+        else:
+            return 1 - prob
+
+    def parameter(self, param):
+        if isinstance(param, Node):
+            return param._val
+        elif isinstance(param, str):
+            return self._graph.node_dict[param]._val
+        elif isinstance(param, Param):
+            return param(self._graph)
+        else:
+            return param
+
+    def sample(self):
+        self._val = 1
+        pos = self.lookup_probability()
+        for child in self.children:
+            pos += child.lookup_probability()
+
+        self._val = 0
+        neg = self.lookup_probability()
+        for child in self.children:
+            neg += child.lookup_probability()
+
+        p = pos / pos + neg
+        out = np.random.binomial(1, p)
+        self._val = out
+        return out
+
 class MetropolisNode(Node):
 
     def __init__(self, name, cand_var=None, **kwargs):

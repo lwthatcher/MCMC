@@ -162,7 +162,7 @@ def golf():
 
 def beta_bernoulli(b=1):
     nodes = [BetaNode('A', 2., 3.),
-             BinaryNode('B', BernoulliParam(), val=b, observed=True)]
+             BernoulliNode('B', 'A', val=b, observed=True)]
     connections = OrderedDict([('A', ['B'])])
     return Graph(connections, nodes)
 
