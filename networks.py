@@ -138,8 +138,8 @@ def wacky():
 
 
 def golf():
-    golfers = set()
-    tournaments = set()
+    golfers = {}
+    tournaments = {}
     tour_connects = {}
     observations = []
     with open('golfers.csv', newline='') as golf_data:
@@ -150,14 +150,46 @@ def golf():
             tour = 't' + line[2]
             name = 'obs' + str(i)
 
-            golfers.add(golfer)
-            tournaments.add(tour)
+            golfers[golfer] = golfers.setdefault(golfer, [])+[name]
+            tournaments[tour] = tournaments.setdefault(tour, [])+[name]
             tour_connects[(tour, golfer)] = name
-            observations.append((name, score))
+            observations.append((name, score, golfer, tour))
     print('read in golf data')
 
     nodes = [NormalNode('hypertour-mean', 72, 2, val=72.8, cand_var=2),
-             InverseGammaNode('hypertour-var', 18, 0.015)]
+             InverseGammaNode('hypertour-var', 18, 1/0.015, val=3),
+             InverseGammaNode('hypergolfer-var', 18, 1/0.015, val=3.5),
+             InverseGammaNode('obsvar', 83, 1/0.0014, val=3.1)]
+    for tour in tournaments:
+        nodes.append(NormalNode(tour, 'hypertour-mean', 'hypertour-var', val=72))
+    print('created tournament nodes')
+    for golfer in golfers:
+        nodes.append(NormalNode(golfer, 0, 'hypergolfer-var', val=0))
+    print('created golfer nodes')
+    for obs in observations:
+        name = obs[0]
+        score = obs[1]
+        golfer = obs[2]
+        tour = obs[3]
+        f = lambda g, t: g + t
+        nodes.append(NormalNode(name, Param(f, golfer, tour), 'obsvar', val=score, observed=True))
+    print('created observation nodes')
+    _cons = [('hypertour-mean', [t for t in tournaments]),
+             ('hypertour-var', [t for t in tournaments])]
+    print('added hyper-tour connections')
+    _cons.append(('hypergolfer-var', [g for g in golfers]))
+    print('added hyper-golfer connections')
+    for tour, obs in tournaments.items():
+        _cons.append((tour, obs))
+    print('added tour connections')
+    for golfer, obs in golfers.items():
+        _cons.append((golfer, obs))
+    print('added golfer connections')
+    _cons.append(('obsvar', [obs[0] for obs in observations]))
+    print('added observation-variance connections')
+    connections = OrderedDict(_cons)
+    print('created connections graph')
+    return Graph(connections, nodes)
 
 
 def beta_bernoulli(b=1):
