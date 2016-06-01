@@ -110,7 +110,7 @@ class BernoulliParam:
 
 
 class Param:
-    def __init__(self, func, args):
+    def __init__(self, func, *args):
         self._func = func
         self._args = args
 
