@@ -173,3 +173,9 @@ def normal_normal():
              NormalNode('B', Param(mu, 'A'), 1., val=1.2, observed=True)]
     connections = OrderedDict([('A', ['B'])])
     return Graph(connections, nodes)
+
+
+def bernoulli_simple():
+    nodes = [BernoulliNode('B', 0.1)]
+    connections = OrderedDict([])
+    return Graph(connections, nodes)

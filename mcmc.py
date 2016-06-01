@@ -71,11 +71,11 @@ def beta_pdf(x, alpha, beta):
 
 
 def beta_expected_t(x):
-    return beta_pdf(x, 3, 4)
+    return beta_pdf(x, 3, 3)
 
 
 def beta_expected_f(x):
-    return beta_pdf(x, 3, 3)
+    return beta_pdf(x, 2, 4)
 
 
 def var_prior_pdf(x):
@@ -239,6 +239,14 @@ def beta_bernoulli_tests():
     plotposterior([s['A'] for s in samples], beta_expected_f, 'beta-bernoulli', 0, 1)
 
 
+def simple_bernoulli_tests():
+    graph = bernoulli_simple()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(50, 10000)
+    mean, f_mean = sample_dim(samples, 'B')
+    print("P(B) = <", mean, ", ", f_mean, ">")
+
+
 def main(_tests):
     for test in _tests:
         if test == 'lab1':
@@ -253,6 +261,13 @@ def main(_tests):
             normal_normal_tests()
         elif test == 'beta_bernoulli':
             beta_bernoulli_tests()
+        elif test == 'simple_bernoulli':
+            simple_bernoulli_tests()
+        elif test == 'sanity_checks':
+            normal_normal_tests()
+            beta_bernoulli_tests()
+        else:
+            print('unrecognized test:', test)
 
 
 if __name__ == '__main__':

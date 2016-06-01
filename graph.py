@@ -145,14 +145,14 @@ class BernoulliNode(Node):
         self._val = 1
         pos = self.lookup_probability()
         for child in self.children:
-            pos += child.lookup_probability()
+            pos *= child.lookup_probability()
 
         self._val = 0
         neg = self.lookup_probability()
         for child in self.children:
-            neg += child.lookup_probability()
+            neg *= child.lookup_probability()
 
-        p = pos / pos + neg
+        p = pos / (pos + neg)
         out = np.random.binomial(1, p)
         self._val = out
         return out
