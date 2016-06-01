@@ -3,6 +3,7 @@ import argparse
 from networks import *
 import matplotlib.pyplot as plt
 import matplotlib.pylab as mlab
+import pickle
 
 
 class MCMC:
@@ -224,8 +225,13 @@ def wacky_network_tests():
 def golfer_network_tests():
     graph = golf()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(300, 1000)
+    samples = mcmc.gibbs(1000, 10000)
     print('woohoo! the golfers finished!')
+    with open('golf_samples.pickle', 'wb') as gs:
+        pickle.dump(samples, gs)
+    with open('golf_graph.pickle', 'wb') as gg:
+        pickle.dump(graph, gg)
+
 
 def normal_normal_tests():
     graph = normal_normal()

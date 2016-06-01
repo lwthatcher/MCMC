@@ -174,22 +174,22 @@ def golf():
         f = lambda g, t: g._val + t._val
         nodes.append(NormalNode(name, Param(f, golfer, tour), 'obsvar', val=score, observed=True))
     print('created observation nodes')
-    _cons = [('hypertour-mean', [t for t in tournaments]),
-             ('hypertour-var', [t for t in tournaments])]
-    print('added hyper-tour connections')
-    _cons.append(('hypergolfer-var', [g for g in golfers]))
-    print('added hyper-golfer connections')
+    connections = {'hypertour-mean': [t for t in tournaments],
+                   'hypertour-var': [t for t in tournaments],
+                   'hypergolfer-var': [g for g in golfers]}
+    print('added hyper connections')
     for tour, obs in tournaments.items():
-        _cons.append((tour, obs))
+        connections[tour] = obs
     print('added tour connections')
     for golfer, obs in golfers.items():
-        _cons.append((golfer, obs))
+        connections[golfer] = obs
     print('added golfer connections')
-    _cons.append(('obsvar', [obs[0] for obs in observations]))
+    connections['obsvar'] = [obs[0] for obs in observations]
     print('added observation-variance connections')
-    connections = OrderedDict(_cons)
-    print('created connections graph')
-    return Graph(connections, nodes)
+    result = Graph(connections, nodes)
+    result.golfers = golfers
+    print('created graph')
+    return result
 
 
 def beta_bernoulli(b=1):
@@ -197,6 +197,7 @@ def beta_bernoulli(b=1):
              BernoulliNode('B', 'A', val=b, observed=True)]
     connections = OrderedDict([('A', ['B'])])
     return Graph(connections, nodes)
+
 
 
 def normal_normal():

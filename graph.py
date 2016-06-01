@@ -36,6 +36,8 @@ class Node:
         self._graph = graph
         self._val = val
         self.observed = observed
+        self._parents = None
+        self._children = None
 
     def __str__(self):
         return self.name
@@ -48,13 +50,17 @@ class Node:
 
     @property
     def parents(self):
-        p = self._graph.inv_connections.get(self.name, [])
-        return [self._graph.node_dict[n] for n in p]
+        if self._parents is None:
+            p = self._graph.inv_connections.get(self.name, [])
+            self._parents = [self._graph.node_dict[n] for n in p]
+        return self._parents
 
     @property
     def children(self):
-        c = self._graph.connections.get(self.name, [])
-        return [self._graph.node_dict[n] for n in c]
+        if self._children is None:
+            c = self._graph.connections.get(self.name, [])
+            self._children = [self._graph.node_dict[n] for n in c]
+        return self._children
 
     @property
     def value(self):
