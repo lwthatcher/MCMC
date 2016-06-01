@@ -161,8 +161,10 @@ def golf():
 
 
 def beta_bernoulli():
-    nodes = []
-    pass
+    nodes = [BetaNode('A', 2., 3.),
+             BernoulliNode('B', BernoulliParam(), val=1, observed=True)]
+    connections = OrderedDict([('A', ['B'])])
+    return Graph(connections, nodes)
 
 
 def normal_normal():
