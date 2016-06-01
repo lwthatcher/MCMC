@@ -224,7 +224,8 @@ def wacky_network_tests():
 def golfer_network_tests():
     graph = golf()
     mcmc = MCMC(graph=graph)
-
+    samples = mcmc.gibbs(300, 1000)
+    print('woohoo! the golfers finished!')
 
 def normal_normal_tests():
     graph = normal_normal()

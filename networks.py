@@ -146,7 +146,7 @@ def golf():
         reader = csv.reader(golf_data, delimiter=' ')
         for i,line in enumerate(reader):
             golfer = line[0]
-            score = line[1]
+            score = float(line[1])
             tour = 't' + line[2]
             name = 'obs' + str(i)
 
@@ -171,7 +171,7 @@ def golf():
         score = obs[1]
         golfer = obs[2]
         tour = obs[3]
-        f = lambda g, t: g + t
+        f = lambda g, t: g._val + t._val
         nodes.append(NormalNode(name, Param(f, golfer, tour), 'obsvar', val=score, observed=True))
     print('created observation nodes')
     _cons = [('hypertour-mean', [t for t in tournaments]),
