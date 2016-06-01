@@ -62,6 +62,12 @@ def normal_expected_pdf(x):
         math.exp(-1 / (2 * var) * (x - mean) ** 2))
 
 
+def gamma_expected_pdf(x):
+    alpha = 5
+    beta = 4
+    return ((beta**alpha)/math.gamma(alpha)) * x**(alpha-1) * math.e**(-1 * beta * x)
+
+
 def B(alpha, beta):
     return (math.gamma(alpha) * math.gamma(beta)) / math.gamma(alpha + beta)
 
@@ -230,13 +236,20 @@ def normal_normal_tests():
 def beta_bernoulli_tests():
     graph = beta_bernoulli()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(50000, 10000)
+    samples = mcmc.gibbs(5000, 10000)
     plotposterior([s['A'] for s in samples], beta_expected_t, 'beta-bernoulli', 0, 1)
 
     graph = beta_bernoulli(b=0)
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(50000, 10000)
+    samples = mcmc.gibbs(5000, 10000)
     plotposterior([s['A'] for s in samples], beta_expected_f, 'beta-bernoulli', 0, 1)
+
+
+def gamma_poisson_tests():
+    graph = gamma_poisson()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(50000, 10000)
+    plotposterior([s['L'] for s in samples], gamma_expected_pdf, 'gamma-poisson', 0, 12)
 
 
 def simple_bernoulli_tests():
@@ -263,9 +276,12 @@ def main(_tests):
             beta_bernoulli_tests()
         elif test == 'simple_bernoulli':
             simple_bernoulli_tests()
+        elif test == 'gamma_poisson':
+            gamma_poisson_tests()
         elif test == 'sanity_checks':
             normal_normal_tests()
             beta_bernoulli_tests()
+            gamma_poisson_tests()
         else:
             print('unrecognized test:', test)
 

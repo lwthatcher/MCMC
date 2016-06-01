@@ -175,6 +175,13 @@ def normal_normal():
     return Graph(connections, nodes)
 
 
+def gamma_poisson():
+    nodes = [GammaNode('L', 2., 3.),
+             PoissonNode('X', 'L', val=3, observed=True)]
+    connections = OrderedDict([('L', ['X'])])
+    return Graph(connections, nodes)
+
+
 def bernoulli_simple():
     nodes = [BernoulliNode('B', 0.1)]
     connections = OrderedDict([])
