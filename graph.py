@@ -1,6 +1,7 @@
 import numpy as np
 import math
 from scipy.special import gammaln
+import scipy.stats
 
 
 class Graph:
@@ -156,6 +157,7 @@ class BernoulliNode(Node):
         self._val = out
         return out
 
+
 class MetropolisNode(Node):
 
     def __init__(self, name, cand_var=None, **kwargs):
@@ -276,6 +278,9 @@ class BetaNode(MetropolisNode):
         super().__init__(name, **kwargs)
         self._alpha = alpha
         self._beta = beta
+
+    def get_candidate_value(self):
+        return scipy.stats.beta.rvs(1, 1)
 
     @property
     def alpha(self):

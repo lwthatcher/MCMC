@@ -66,8 +66,7 @@ def B(alpha, beta):
     return (math.gamma(alpha) * math.gamma(beta)) / math.gamma(alpha + beta)
 
 
-def beta_pdf(x, alpha=3, beta=4):
-    print(alpha, beta)
+def beta_pdf(x, alpha, beta):
     return ((x ** (alpha-1)) * ((1-x)**(beta-1))) / B(alpha, beta)
 
 
@@ -231,12 +230,12 @@ def normal_normal_tests():
 def beta_bernoulli_tests():
     graph = beta_bernoulli()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(5000, 10000)
+    samples = mcmc.gibbs(50000, 10000)
     plotposterior([s['A'] for s in samples], beta_expected_t, 'beta-bernoulli', 0, 1)
 
     graph = beta_bernoulli(b=0)
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(5000, 10000)
+    samples = mcmc.gibbs(50000, 10000)
     plotposterior([s['A'] for s in samples], beta_expected_f, 'beta-bernoulli', 0, 1)
 
 
