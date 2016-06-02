@@ -223,7 +223,7 @@ def faculty_evaluation_tests():
 def wacky_network_tests():
     graph = wacky()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(10000, 10000)
+    samples = mcmc.gibbs(20000, 100000)
     with open('wacky_samples.pickle', 'wb') as ws:
         pickle.dump(samples, ws)
     with open('wacky_graph.pickle', 'wb') as wg:
@@ -235,10 +235,30 @@ def wacky_network_tests():
 
 def load_wacky():
     samples = load_samples('wacky_samples.pickle')
-    graph = wacky()
+    graph = load_samples('wacky_graph.pickle')
     for node in graph.nodes:
         mixing_plot(samples, node.name)
         plot_distribution(samples, node.name)
+
+
+def load_golf():
+    golfermean = load_samples('golf_samples.pickle')
+    nsamples = len(golfermean)
+    graph = golf()
+    ability = []
+    for golfer in graph.golfers:
+        samples = [l[golfer] for l in golfermean]
+        samples.sort()
+        median = samples[nsamples // 2]
+        low = samples[int(.05 * nsamples)]
+        high = samples[int(.95 * nsamples)]
+        ability.append((golfer, low, median, high))
+
+    ability.sort(key=lambda x: x[2])
+    i = 1
+    for golfer, low, median, high in ability:
+        print('%d: %s %f; 90%% interval: (%f, %f)' % (i, golfer, median, low, high))
+        i += 1
 
 
 def golfer_network_tests():
@@ -262,12 +282,12 @@ def normal_normal_tests():
 def beta_bernoulli_tests():
     graph = beta_bernoulli()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(5000, 10000)
+    samples = mcmc.gibbs(5000, 100000)
     plotposterior([s['A'] for s in samples], beta_expected_t, 'beta-bernoulli', 0, 1)
 
     graph = beta_bernoulli(b=0)
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(5000, 10000)
+    samples = mcmc.gibbs(13000, 100000)
     plotposterior([s['A'] for s in samples], beta_expected_f, 'beta-bernoulli', 0, 1)
 
 
@@ -310,6 +330,8 @@ def main(_tests):
             gamma_poisson_tests()
         elif test == 'load_wacky':
             load_wacky()
+        elif test == 'load_golf':
+            load_golf()
         else:
             print('unrecognized test:', test)
 

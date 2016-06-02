@@ -126,10 +126,10 @@ def wacky_b(a):
 
 
 def wacky():
-    nodes = [NormalNode('A', 20.,1., val=20, cand_var=1),
+    nodes = [NormalNode('A', 20.,1., val=20, cand_var=15),
              BetaNode('E', 1, 1, val=0.5, cand_var=1/8),
-             GammaNode('B', Param(wacky_b, 'A'), 7, val=1700, cand_var=1000),
-             BetaNode('D', 'A', 'B', val=0.01, cand_var=1/8),
+             GammaNode('B', Param(wacky_b, 'A'), 7, val=1700, cand_var=700**2),
+             BetaNode('D', 'A', 'E', val=0.5, cand_var=1/8),
              BinaryNode('C', BernoulliParam()),
              PoissonNode('F', 'D', cand_var=1.5),
              NormalNode('G', 'E', 'F', val=1)]
@@ -197,7 +197,7 @@ def golf():
 
 def beta_bernoulli(b=1):
     nodes = [BetaNode('A', 2., 3.),
-             BernoulliNode('B', 'A', val=b, observed=True)]
+             BinaryNode('B', BernoulliParam(), val=b, observed=True)]
     connections = OrderedDict([('A', ['B'])])
     return Graph(connections, nodes)
 
