@@ -309,6 +309,51 @@ class BetaNode(MetropolisNode):
         return gammaln(alpha+beta) - gammaln(alpha) - gammaln(beta) + (alpha-1)*np.log(x) + (beta-1)*np.log(1-x)
 
 
+class UniformNode(MetropolisNode):
+    def __init__(self, name, theta, discrete=False, **kwargs):
+        super().__init__(name, **kwargs)
+        self._theta = theta
+        self.discrete = discrete
+
+    def get_candidate_value(self):
+        r = np.random.uniform(0, self.theta)
+        if self.discrete:
+            r = round(r)
+        return r
+
+    @property
+    def theta(self):
+        return self.parameter(self._theta)
+
+    def lookup_probability(self):
+        return -1 * np.log(self.theta)
+
+
+class ParetoNode(MetropolisNode):
+    def __init__(self, name, alpha, x_0, **kwargs):
+        super().__init__(name, **kwargs)
+        self._alpha = alpha
+        self._x_0 = x_0
+
+    @property
+    def alpha(self):
+        return self.parameter(self._alpha)
+
+    @property
+    def x_0(self):
+        return self.parameter(self._x_0)
+
+    def sample(self, cand=None):
+        cand = self.get_candidate_value()
+        if cand < self.x_0:
+            return self._val
+        return super().sample(cand)
+
+    def lookup_probability(self):
+        x = self._val
+        return np.log(self.alpha) + self.alpha*np.log(self.x_0) - (self.alpha+1)*np.log(x)
+
+
 class PoissonNode(MetropolisNode):
     def __init__(self, name, theta, **kwargs):
         super().__init__(name, **kwargs)
