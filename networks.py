@@ -1,3 +1,4 @@
+import random
 from collections import OrderedDict
 from graph import *
 import csv
@@ -118,6 +119,24 @@ def faculty_evals():
     connections = OrderedDict([('mu', ['x' + str(i) for i in range(len(scores))]),
                                ('sigma2', ['x' + str(i) for i in range(len(scores))])])
 
+    return Graph(connections, nodes)
+
+
+def tanks():
+    n = 1556
+    num_obs = 200
+    obs_tanks = [random.randint(0, n) for x in range(num_obs)]
+
+    def f(a):
+        return a._val * 10
+
+    # obs_tanks = [46, 22, 101, 6, 94, 116, 28, 32, 37, 12, 10, 54, 93, 94, 50, 15, 29, 38, 89, 86]
+    nodes = [GammaNode('A', 1, 2),
+        ParetoNode('num_tanks', Param(f, 'A'), 200, val=200, cand_var=2000)]
+    for i, tank in enumerate(obs_tanks):
+        nodes.append(UniformNode(str(i), 'num_tanks', val=tank, observed=True))
+    connections = {'A': ['num_tanks'],
+                   'num_tanks': [str(i) for i in range(num_obs)]}
     return Graph(connections, nodes)
 
 

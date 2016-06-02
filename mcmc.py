@@ -307,6 +307,16 @@ def simple_bernoulli_tests():
     print("P(B) = <", mean, ", ", f_mean, ">")
 
 
+def tanks_tests():
+    graph = tanks()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(50, 100000)
+    mixing_plot(samples, 'num_tanks')
+    plot_distribution(samples, 'num_tanks')
+    mixing_plot(samples, 'A')
+    plot_distribution(samples, 'A')
+
+
 def main(_tests):
     for test in _tests:
         if test == 'lab1':
@@ -333,6 +343,8 @@ def main(_tests):
             load_wacky()
         elif test == 'load_golf':
             load_golf()
+        elif test == 'tanks':
+            tanks_tests()
         else:
             print('unrecognized test:', test)
 
