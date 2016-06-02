@@ -1,6 +1,7 @@
 
 import argparse
 from networks import *
+from samples_loader import load_samples
 import matplotlib.pyplot as plt
 import matplotlib.pylab as mlab
 import pickle
@@ -28,7 +29,13 @@ class MCMC:
         for i in range(burn):
             self.iteration()
         # take n samples
-        samples = [self.iteration() for i in range(n_samples)]
+        samples = []
+        j = 10
+        for i in range(n_samples):
+            samples.append(self.iteration())
+            if i == j:
+                print(i)
+                j *= 10
 
         return samples
 
@@ -216,7 +223,19 @@ def faculty_evaluation_tests():
 def wacky_network_tests():
     graph = wacky()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(100000, 10000)
+    samples = mcmc.gibbs(10000, 10000)
+    with open('wacky_samples.pickle', 'wb') as ws:
+        pickle.dump(samples, ws)
+    with open('wacky_graph.pickle', 'wb') as wg:
+        pickle.dump(graph, wg)
+    for node in graph.nodes:
+        mixing_plot(samples, node.name)
+        plot_distribution(samples, node.name)
+
+
+def load_wacky():
+    samples = load_samples('wacky_samples.pickle')
+    graph = wacky()
     for node in graph.nodes:
         mixing_plot(samples, node.name)
         plot_distribution(samples, node.name)
@@ -289,6 +308,8 @@ def main(_tests):
             normal_normal_tests()
             beta_bernoulli_tests()
             gamma_poisson_tests()
+        elif test == 'load_wacky':
+            load_wacky()
         else:
             print('unrecognized test:', test)
 
