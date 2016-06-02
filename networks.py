@@ -132,7 +132,7 @@ def wacky():
              BetaNode('D', 'A', 'E', val=0.5, cand_var=1/8),
              BinaryNode('C', BernoulliParam()),
              PoissonNode('F', 'D', cand_var=1.5),
-             NormalNode('G', 'E', 'F', val=1)]
+             NormalNode('G', 'E', 'F', val=5)]
     connections = OrderedDict([('A', ['B', 'D']),
                                ('E', ['D', 'G']),
                                ('D', ['C', 'F']),

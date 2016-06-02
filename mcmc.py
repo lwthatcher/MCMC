@@ -222,11 +222,12 @@ def faculty_evaluation_tests():
 
 def wacky_network_tests():
     graph = wacky()
+    graph.node_dict['G'].observed = True
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(20000, 100000)
-    with open('wacky_samples.pickle', 'wb') as ws:
+    samples = mcmc.gibbs(20000, 2000000)
+    with open('wacky_samples_G.pickle', 'wb') as ws:
         pickle.dump(samples, ws)
-    with open('wacky_graph.pickle', 'wb') as wg:
+    with open('wacky_graph_G.pickle', 'wb') as wg:
         pickle.dump(graph, wg)
     for node in graph.nodes:
         mixing_plot(samples, node.name)
@@ -264,7 +265,7 @@ def load_golf():
 def golfer_network_tests():
     graph = golf()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(1000, 10000)
+    samples = mcmc.gibbs(1000, 100000)
     print('woohoo! the golfers finished!')
     with open('golf_samples.pickle', 'wb') as gs:
         pickle.dump(samples, gs)
