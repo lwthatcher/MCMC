@@ -1,7 +1,9 @@
 from mcmc import MCMC
-import argparse
+import matplotlib
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.pylab as mlab
+import argparse
 from networks import *
 import pickle
 from samples_loader import load_samples
@@ -117,9 +119,11 @@ def faculty_evaluation_1hyper_tests():
     graph = faculty_evals_1hyper()
     mcmc = MCMC(graph=graph)
     samples = mcmc.gibbs(1000, 10000)
-    for node in graph.hidden_nodes:
-        Tests.mixing_plot(samples, node.name)
-        Tests.plot_distribution(samples, node.name)
+    print('time to plot!')
+    Tests.plot_multi(samples, ['mu', 'sigma2'])
+    #for node in graph.hidden_nodes:
+        #Tests.mixing_plot(samples, node.name)
+        #Tests.plot_distribution(samples, node.name)
 
 
 def wacky_network_tests():
@@ -321,6 +325,21 @@ class Tests:
         samples = [s[dim] for s in samples]
         plt.hist(samples, bins=40, normed=True, label='Posterior Dist')
         plt.title('Posterior Distribution of {}'.format(dim))
+        plt.show()
+
+    @classmethod
+    def plot_multi(cls, samples, dims):
+        x = []
+        for dim in dims:
+            x.append([s[dim] for s in samples])
+
+        print("I'm supposed to be plotting stuff now")
+        fig, ax1 = plt.subplots()
+        ax1.hist(x[0], bins=40, normed=True, label='mu', color='r', alpha=0.9)
+        ax1.legend()
+        ax2 = ax1.twiny()
+        ax2.hist(x[1], bins=40, normed=True, label='sigma2', color='b', alpha=0.5)
+        ax2.legend()
         plt.show()
 
     @classmethod
