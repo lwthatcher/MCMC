@@ -225,9 +225,9 @@ def wacky_network_tests():
     graph.node_dict['G'].observed = True
     mcmc = MCMC(graph=graph)
     samples = mcmc.gibbs(20000, 2000000)
-    with open('wacky_samples_G.pickle', 'wb') as ws:
+    with open('wacky_G_samples.pickle', 'wb') as ws:
         pickle.dump(samples, ws)
-    with open('wacky_graph_G.pickle', 'wb') as wg:
+    with open('wacky_G_graph.pickle', 'wb') as wg:
         pickle.dump(graph, wg)
     for node in graph.nodes:
         mixing_plot(samples, node.name)
@@ -243,8 +243,8 @@ def load_wacky():
 
 
 def load_wacky_G():
-    samples = load_samples('wacky_samples_G.pickle')
-    graph = load_samples('wacky_graph_G.pickle')
+    samples = load_samples('wacky_G_samples.pickle')
+    graph = load_samples('wacky_G_graph.pickle')
     for node in graph.hidden_nodes:
         mixing_plot(samples, node.name)
         plot_distribution(samples, node.name)

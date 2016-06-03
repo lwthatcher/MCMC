@@ -5,3 +5,7 @@ __pycache__/
 
 # IDE stuff
 .idea/
+
+# saved samples/graphs
+*_samples.pickle
+*_graph.pickle
