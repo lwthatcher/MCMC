@@ -354,7 +354,7 @@ class ParetoNode(MetropolisNode):
 
     def lookup_probability(self):
         x = self._val
-        if self._val < self.x_0:
+        if x < self.x_0:
             return 0
         return np.log(self.alpha) + self.alpha*np.log(self.x_0) - (self.alpha+1)*np.log(x)
 

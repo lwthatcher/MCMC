@@ -335,6 +335,18 @@ def progress_tests():
     print('median', median)
 
 
+def pareto_poisson_tests():
+    graph = pareto()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(2000, 100000)
+    for node in graph.hidden_nodes:
+        #mixing_plot(samples, node.name)
+        plot_distribution(samples, node.name)
+        encounters = [s[node.name] for s in samples]
+        median = np.median(encounters)
+        print('median', median)
+
+
 def main(_tests):
     for test in _tests:
         if test == 'lab1':
@@ -367,6 +379,8 @@ def main(_tests):
             tanks_tests()
         elif test == 'progress':
             progress_tests()
+        elif test == 'pp':
+            pareto_poisson_tests()
         else:
             print('unrecognized test:', test)
 

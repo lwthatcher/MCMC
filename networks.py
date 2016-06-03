@@ -251,3 +251,11 @@ def progress():
              PoissonNode('Encounters', Param(r, 'Progress'))]
     connections = OrderedDict([('Progress', ['Encounters'])])
     return Graph(connections, nodes)
+
+
+def pareto():
+    nodes = [GammaNode('A', 9., 2.),
+             ParetoNode('Lambda', 'A', 22, val=22, cand_var=3),
+             PoissonNode('C', 'Lambda', val=23)]
+    connections = {'A': ['Lambda'], 'Lambda': ['C']}
+    return Graph(connections, nodes)
