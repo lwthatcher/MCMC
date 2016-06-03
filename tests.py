@@ -106,11 +106,20 @@ def dirty_roommates_tests():
 def faculty_evaluation_tests():
     graph = faculty_evals()
     mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(50, 10000)
+    samples = mcmc.gibbs(500, 10000)
     Tests.mixing_plot(samples, 'mu')
     Tests.mixing_plot(samples, 'sigma2')
     Tests.plotposterior([s['mu'] for s in samples], faculty_mean_prior, 'mean', 5.0, 6.5)
     Tests.plotposterior([s['sigma2'] for s in samples], faculty_var_prior, 'var', 0.0001, 1.0)
+
+
+def faculty_evaluation_1hyper_tests():
+    graph = faculty_evals_1hyper()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(1000, 10000)
+    for node in graph.hidden_nodes:
+        Tests.mixing_plot(samples, node.name)
+        Tests.plot_distribution(samples, node.name)
 
 
 def wacky_network_tests():
@@ -272,7 +281,8 @@ class Tests:
                           'sanity_checks': [normal_normal_tests, beta_bernoulli_tests, gamma_poisson_tests],
                           'tanks': tanks_tests,
                           'progress': progress_tests,
-                          'pareto-poisson': pareto_poisson_tests}
+                          'pareto-poisson': pareto_poisson_tests,
+                          'hyper_1': faculty_evaluation_1hyper_tests}
 
     def perform_tests(self, tests):
         for test in tests:

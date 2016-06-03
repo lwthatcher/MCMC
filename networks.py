@@ -122,6 +122,23 @@ def faculty_evals():
     return Graph(connections, nodes)
 
 
+def faculty_evals_1hyper():
+    scores = [6.39, 6.32, 6.25, 6.24, 6.21, 6.18, 6.17, 6.13, 6.00, 6.00, 5.97, 5.82, 5.81, 5.71, 5.55, 5.50, 5.39,
+              5.37, 5.35, 5.30, 5.27, 4.94, 4.50]
+
+    plate_nodes = [NormalNode('x' + str(i), 'mu', 'sigma2', val=score, observed=True) for i, score in enumerate(scores)]
+
+    nodes = [NormalNode('mu_mu', 5.7, 1, val=5.7),
+             NormalNode('mu', 'mu_mu', 1 / 9, cand_var=0.2, val=5.),
+             InverseGammaNode('sigma2', 11., 2.5, cand_var=0.15, val=0.3)] + plate_nodes
+
+    connections = {'mu_mu': ['mu'],
+                   'mu': ['x' + str(i) for i in range(len(scores))],
+                   'sigma2': ['x' + str(i) for i in range(len(scores))]}
+
+    return Graph(connections, nodes)
+
+
 def tanks():
     n = 1556
     num_obs = 200
