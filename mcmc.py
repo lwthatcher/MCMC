@@ -242,6 +242,14 @@ def load_wacky():
         plot_distribution(samples, node.name)
 
 
+def load_wacky_G():
+    samples = load_samples('wacky_samples_G.pickle')
+    graph = load_samples('wacky_graph_G.pickle')
+    for node in graph.hidden_nodes:
+        mixing_plot(samples, node.name)
+        plot_distribution(samples, node.name)
+
+
 def load_golf():
     golfermean = load_samples('golf_samples.pickle')
     nsamples = len(golfermean)
@@ -317,6 +325,16 @@ def tanks_tests():
     plot_distribution(samples, 'A')
 
 
+def progress_tests():
+    graph = progress()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(2000, 50000)
+    plot_distribution(samples, 'Encounters')
+    encounters = [s['Encounters'] for s in samples]
+    median = np.median(encounters)
+    print('median', median)
+
+
 def main(_tests):
     for test in _tests:
         if test == 'lab1':
@@ -341,10 +359,14 @@ def main(_tests):
             gamma_poisson_tests()
         elif test == 'load_wacky':
             load_wacky()
+        elif test == 'load_wacky_G':
+            load_wacky_G()
         elif test == 'load_golf':
             load_golf()
         elif test == 'tanks':
             tanks_tests()
+        elif test == 'progress':
+            progress_tests()
         else:
             print('unrecognized test:', test)
 

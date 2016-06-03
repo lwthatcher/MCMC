@@ -241,3 +241,13 @@ def bernoulli_simple():
     nodes = [BernoulliNode('B', 0.1)]
     connections = OrderedDict([])
     return Graph(connections, nodes)
+
+
+def progress():
+    def r(a):
+        return 1. / a._val
+
+    nodes = [BetaNode('Progress', 2., 15.),
+             PoissonNode('Encounters', Param(r, 'Progress'))]
+    connections = OrderedDict([('Progress', ['Encounters'])])
+    return Graph(connections, nodes)

@@ -380,5 +380,5 @@ class PoissonNode(MetropolisNode):
         return round(np.random.normal(mu, sigma))
 
     def lookup_probability(self):
-        x = self._val
-        return x*np.log(self.theta) - np.log(math.factorial(x)) - self.theta
+        x = float(self._val)
+        return x*np.log(self.theta) - gammaln(x+1.) - self.theta
