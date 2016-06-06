@@ -71,7 +71,10 @@ class BinaryNode(Node):
 
     def __init__(self, name, probs, **kwargs):
         super().__init__(name, **kwargs)
-        self._probs = probs
+        if isinstance(probs, BernoulliParam):
+            self._probs = probs
+        else:
+            self._probs = BernoulliTable(probs, self)
 
     def lookup_probability(self):
         given = self._parent_values()
@@ -107,6 +110,23 @@ class BinaryNode(Node):
             return 't'
         else:
             return 'f'
+
+
+class BernoulliTable:
+    def __init__(self, probs, node):
+        self.probs = probs
+        self.node = node
+
+    def __getitem__(self, item):
+        x = self.probs[item]
+        if isinstance(x, Node):
+            return x._val
+        if isinstance(x, str):
+            node = self.node._graph.node_dict[x]
+            self.probs[item] = node
+            return node._val
+        else:
+            return x
 
 
 class BernoulliParam:
