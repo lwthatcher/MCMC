@@ -118,14 +118,16 @@ def faculty_evaluation_tests():
 
 
 def faculty_evaluation_1hyper_tests():
-    graph = faculty_evals_1hyper()
-    mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(1000, 10000)
-    print('time to plot!')
-    Tests.plot_multi(samples, ['mu', 'sigma2'])
-    #for node in graph.hidden_nodes:
-        #Tests.mixing_plot(samples, node.name)
-        #Tests.plot_distribution(samples, node.name)
+    for n in range(5):
+        graph = faculty_evals_1hyper(n)
+        mcmc = MCMC(graph=graph)
+        samples = mcmc.gibbs(1000, 10000)
+        print('time to plot!')
+        Tests.plot_multi(samples, ['mu', 'sigma2'])
+        print(graph.nodes)
+        for node in graph.hidden_nodes:
+            Tests.mixing_plot(samples, node.name)
+            Tests.plot_distribution(samples, node.name)
 
 
 def wacky_network_tests():
@@ -334,14 +336,16 @@ class Tests:
         color_list = matplotlib.colors.ColorConverter.colors
         it = iter(sorted(color_list.items()))
         fig, ax = plt.subplots()
+        axes = [ax]
         patches = []
         for i, dim in enumerate(dims):
             x = [s[dim] for s in samples]
             c = next(it)[1]
-            ax.hist(x, bins=40, normed=True, label=dim, color=c, alpha=0.5)
+            axx = axes[-1]
+            axx.hist(x, bins=40, normed=True, label=dim, color=c, alpha=0.5)
             patch = mpatches.Patch(color=c, label=dim, alpha=0.5)
             patches.append(patch)
-            ax = ax.twiny()
+            axes.append(axx.twiny())
         plt.legend(handles=patches)
         plt.show()
 

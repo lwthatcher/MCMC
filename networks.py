@@ -122,19 +122,54 @@ def faculty_evals():
     return Graph(connections, nodes)
 
 
-def faculty_evals_1hyper():
+def _eval_num_dict(n):
+    if n == 0:
+        return {'mu': [5., 1 / 9], 'sigma2': [11., 2.5]}
+    elif n == 1:
+        return {'mu': ['mu_mu', 1/9], 'sigma2': [11., 2.5]}
+    elif n == 2:
+        return {'mu': ['mu_mu', 'mu_var'], 'sigma2': [11., 2.5]}
+    elif n == 3:
+        return {'mu': ['mu_mu', 'mu_var'], 'sigma2': ["var_a", 2.5]}
+    elif n == 4:
+        return {'mu': ['mu_mu', 'mu_var'], 'sigma2': ["var_a", "var_b"]}
+
+
+def _eval_connect_dict(n):
+    if n == 0:
+        return {}
+    elif n == 1:
+        return {'mu_mu': ['mu']}
+    elif n == 2:
+        return {'mu_mu': ['mu'], 'mu_var': ['mu']}
+    elif n == 3:
+        return {'mu_mu': ['mu'], 'mu_var': ['mu'], 'var_a': ['sigma2']}
+    elif n == 4:
+        return {'mu_mu': ['mu'], 'mu_var': ['mu'], 'var_a': ['sigma2'], 'var_b': ['sigma2']}
+
+
+def faculty_evals_1hyper(n):
     scores = [6.39, 6.32, 6.25, 6.24, 6.21, 6.18, 6.17, 6.13, 6.00, 6.00, 5.97, 5.82, 5.81, 5.71, 5.55, 5.50, 5.39,
               5.37, 5.35, 5.30, 5.27, 4.94, 4.50]
 
+    hyper_nodes = [NormalNode('mu_mu', 5.7, 1, val=5.7),
+                   InverseGammaNode('mu_var', 10, 1, val=1/9),
+                   GammaNode('var_a', 30, 2.75, val=11.),
+                   GammaNode('var_b', 5, 1.3)]
+
     plate_nodes = [NormalNode('x' + str(i), 'mu', 'sigma2', val=score, observed=True) for i, score in enumerate(scores)]
+    hyper_params = _eval_num_dict(n)
 
-    nodes = [NormalNode('mu_mu', 5.7, 1, val=5.7),
-             NormalNode('mu', 'mu_mu', 1 / 9, cand_var=0.2, val=5.),
-             InverseGammaNode('sigma2', 11., 2.5, cand_var=0.15, val=0.3)] + plate_nodes
+    nodes = [hyper_nodes[i] for i in range(n)]
 
-    connections = {'mu_mu': ['mu'],
-                   'mu': ['x' + str(i) for i in range(len(scores))],
-                   'sigma2': ['x' + str(i) for i in range(len(scores))]}
+    nodes += [NormalNode('mu', hyper_params['mu'][0], hyper_params['mu'][1], cand_var=0.2, val=5.),
+              InverseGammaNode('sigma2', hyper_params['sigma2'][0], hyper_params['sigma2'][1], cand_var=0.15, val=0.3)]
+
+    nodes += plate_nodes
+
+    connections = _eval_connect_dict(n)
+    connections['mu'] = ['x' + str(i) for i in range(len(scores))]
+    connections['sigma2'] = ['x' + str(i) for i in range(len(scores))]
 
     return Graph(connections, nodes)
 
