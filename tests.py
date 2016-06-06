@@ -259,9 +259,23 @@ def hyper_alarm_generate():
     mean, f_mean = Tests.sample_dim(samples, 'E')
     print(mean, f_mean)
 
+    saved_samples = []
     for i, sample in enumerate(samples):
         if i < 301 and i % 3 == 0:
-            print(sample)
+            #print(sample)
+            saved_samples.append(sample)
+    print(saved_samples)
+
+
+def hyper_alarm_learning_tests():
+    graph = hyper_alarm_learn()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(1000, 1000)
+    mean, f_mean = Tests.sample_dim(samples, 'b_B')
+    print(mean, f_mean)
+    mean, f_mean = Tests.sample_dim(samples, 'b_E')
+    print(mean, f_mean)
+
 
 def faculty_mean_prior(x):
     return Tests.normal_pdf(x, 5, 1 / 9)
@@ -305,7 +319,8 @@ class Tests:
                           'progress': progress_tests,
                           'pareto-poisson': pareto_poisson_tests,
                           'faculty-hyper': hyper_faculty_tests,
-                          'alarm-hyper-gen': hyper_alarm_generate}
+                          'alarm-hyper-gen': hyper_alarm_generate,
+                          'alarm-hyper-learn': hyper_alarm_learning_tests}
 
     def perform_tests(self, tests):
         for test in tests:

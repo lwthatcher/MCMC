@@ -18,16 +18,16 @@ def alarm():
 
 def hyper_alarm():
 
-    nodes = [BetaNode('b_B', 1, 1, val=0.2, observed=True, hyper=True),
-             BetaNode('b_E', 1, 1, val=0.3, observed=True, hyper=True),
+    nodes = [BetaNode('b_B', 1, 1, val=0.15, observed=True, hyper=True),
+             BetaNode('b_E', 1, 1, val=0.7, observed=True, hyper=True),
              BetaNode('b_A_11', 1, 1, val=0.95, observed=True, hyper=True),
              BetaNode('b_A_10', 1, 1, val=0.94, observed=True, hyper=True),
-             BetaNode('b_A_01', 1, 1, val=0.29, observed=True, hyper=True),
-             BetaNode('b_A_00', 1, 1, val=0.2, observed=True, hyper=True),
-             BetaNode('b_J_1', 1, 1, val=0.9, observed=True, hyper=True),
+             BetaNode('b_A_01', 1, 1, val=0.25, observed=True, hyper=True),
+             BetaNode('b_A_00', 1, 1, val=0.01, observed=True, hyper=True),
+             BetaNode('b_J_1', 1, 1, val=0.95, observed=True, hyper=True),
              BetaNode('b_J_0', 1, 1, val=0.2, observed=True, hyper=True),
-             BetaNode('b_M_1', 1, 1, val=0.7, observed=True, hyper=True),
-             BetaNode('b_M_0', 1, 1, val=0.3, observed=True, hyper=True),
+             BetaNode('b_M_1', 1, 1, val=0.77, observed=True, hyper=True),
+             BetaNode('b_M_0', 1, 1, val=0.1, observed=True, hyper=True),
              BinaryNode('B', {(): 'b_B'}, val=0.),
              BinaryNode('E', {(): 'b_E'}, val=0.),
              BinaryNode('A', {(1, 1): 'b_A_11', (1, 0): 'b_A_10', (0, 1): 'b_A_01', (0, 0): 'b_A_00'}, val=0.),
@@ -46,6 +46,160 @@ def hyper_alarm():
                                ('b_J_0', ['J']),
                                ('b_M_1', ['M']),
                                ('b_M_0', ['M'])])
+    return Graph(connections, nodes)
+
+
+# noinspection PyTypeChecker
+def hyper_alarm_learn():
+    obs = [{'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 0, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 1, 'E': 0, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 0, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 1, 'E': 0, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 0, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 1, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 1, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 1, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 1, 'B': 0, 'E': 1, 'J': 1, 'A': 1},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 1, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
+           {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0}]
+
+    nodes = [BetaNode('b_B', 1, 1, val=0.2, hyper=True),
+             BetaNode('b_E', 1, 1, val=0.3, hyper=True),
+             BetaNode('b_A_11', 1, 1, val=0.95, hyper=True),
+             BetaNode('b_A_10', 1, 1, val=0.94, hyper=True),
+             BetaNode('b_A_01', 1, 1, val=0.29, hyper=True),
+             BetaNode('b_A_00', 1, 1, val=0.2, hyper=True),
+             BetaNode('b_J_1', 1, 1, val=0.9, hyper=True),
+             BetaNode('b_J_0', 1, 1, val=0.2,hyper=True),
+             BetaNode('b_M_1', 1, 1, val=0.7, hyper=True),
+             BetaNode('b_M_0', 1, 1, val=0.3, hyper=True)]
+
+    cdict = {'B': [], 'E': [], 'A': [], 'J': [], 'M': []}
+    _cons = []
+
+    for i, o in enumerate(obs):
+        B = 'B'+str(i)
+        E = 'E'+str(i)
+        A = 'A'+str(i)
+        J = 'J'+str(i)
+        M = 'M'+str(i)
+        nodes.append(BinaryNode(B, {(): 'b_B'}, val=o['B'], observed=True))
+        nodes.append(BinaryNode(E, {(): 'b_E'}, val=o['E'], observed=True))
+        nodes.append(BinaryNode(A, {(1, 1): 'b_A_11', (1, 0): 'b_A_10', (0, 1): 'b_A_01', (0, 0): 'b_A_00'}, val=o['A'], observed=True))
+        nodes.append(BinaryNode(J, {(1,): 'b_J_1', (0,): 'b_J_0'}, val=o['J'], observed=True))
+        nodes.append(BinaryNode(M, {(1,): 'b_M_1', (0,): 'b_M_0'}, val=o['M'], observed=True))
+        cdict['B'].append(B)
+        cdict['E'].append(E)
+        cdict['A'].append(A)
+        cdict['J'].append(J)
+        cdict['M'].append(M)
+        _cons.append((B, [A]))
+        _cons.append((E, [A]))
+        _cons.append((A, [J, M]))
+
+    _cons.append(('b_B', cdict['B']))
+    _cons.append(('b_E', cdict['E']))
+    _cons.append(('b_A_11', cdict['A']))
+    _cons.append(('b_A_10', cdict['A']))
+    _cons.append(('b_A_01', cdict['A']))
+    _cons.append(('b_A_00', cdict['A']))
+    _cons.append(('b_J_1', cdict['J']))
+    _cons.append(('b_J_0', cdict['J']))
+    _cons.append(('b_M_1', cdict['M']))
+    _cons.append(('b_M_0', cdict['M']))
+
+    connections = OrderedDict(_cons)
+
     return Graph(connections, nodes)
 
 
