@@ -122,12 +122,13 @@ def faculty_evaluation_1hyper_tests():
         graph = faculty_evals_1hyper(n)
         mcmc = MCMC(graph=graph)
         samples = mcmc.gibbs(1000, 10000)
-        print('time to plot!')
+        print(n)
         Tests.plot_multi(samples, ['mu', 'sigma2'])
         print(graph.nodes)
         for node in graph.hidden_nodes:
-            Tests.mixing_plot(samples, node.name)
-            Tests.plot_distribution(samples, node.name)
+            if node.name != 'mu' and node.name != 'sigma2':
+                Tests.mixing_plot(samples, node.name)
+                Tests.plot_distribution(samples, node.name)
 
 
 def wacky_network_tests():
@@ -337,15 +338,15 @@ class Tests:
         it = iter(sorted(color_list.items()))
         fig, ax = plt.subplots()
         axes = [ax]
+        axes += [ax.twiny() for i in range(len(dims)-1)]
         patches = []
         for i, dim in enumerate(dims):
             x = [s[dim] for s in samples]
             c = next(it)[1]
-            axx = axes[-1]
+            axx = axes[i]
             axx.hist(x, bins=40, normed=True, label=dim, color=c, alpha=0.5)
             patch = mpatches.Patch(color=c, label=dim, alpha=0.5)
             patches.append(patch)
-            axes.append(axx.twiny())
         plt.legend(handles=patches)
         plt.show()
 
