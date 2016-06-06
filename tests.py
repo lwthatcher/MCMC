@@ -3,6 +3,7 @@ import matplotlib
 #matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.pylab as mlab
+import matplotlib.patches as mpatches
 import argparse
 from networks import *
 import pickle
@@ -335,11 +336,14 @@ class Tests:
 
         print("I'm supposed to be plotting stuff now")
         fig, ax1 = plt.subplots()
-        ax1.hist(x[0], bins=40, normed=True, label='mu', color='r', alpha=0.9)
-        ax1.legend()
+        h1 = ax1.hist(x[0], bins=40, normed=True, label='mu', color='r', alpha=0.9)
+        red_patch = mpatches.Patch(color='red', label='mu', alpha=0.9)
+        ax1.set_label('mu')
         ax2 = ax1.twiny()
-        ax2.hist(x[1], bins=40, normed=True, label='sigma2', color='b', alpha=0.5)
-        ax2.legend()
+        h2 = ax2.hist(x[1], bins=40, normed=True, label='sigma2', color='b', alpha=0.5)
+        blue_patch = mpatches.Patch(color='b', label='sigma2', alpha=0.5)
+        ax2.set_label('sigma2')
+        plt.legend(handles=[red_patch, blue_patch])
         plt.show()
 
     @classmethod
