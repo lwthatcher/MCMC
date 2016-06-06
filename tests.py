@@ -1,6 +1,5 @@
 from mcmc import MCMC
 import matplotlib
-#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.pylab as mlab
 import matplotlib.patches as mpatches
@@ -118,10 +117,11 @@ def faculty_evaluation_tests():
 
 
 def hyper_faculty_tests():
+    meta_samples = []
     for n in range(5):
         graph = faculty_evals_1hyper(n)
         mcmc = MCMC(graph=graph)
-        samples = mcmc.gibbs(1000, 10000)
+        samples = mcmc.gibbs(10000, 100000)
         print(n)
         Tests.plot_multi(samples, ['mu', 'sigma2'])
         print(graph.nodes)
