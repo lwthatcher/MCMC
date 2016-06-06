@@ -117,7 +117,7 @@ def faculty_evaluation_tests():
     Tests.plotposterior([s['sigma2'] for s in samples], faculty_var_prior, 'var', 0.0001, 1.0)
 
 
-def faculty_evaluation_1hyper_tests():
+def hyper_faculty_tests():
     for n in range(5):
         graph = faculty_evals_1hyper(n)
         mcmc = MCMC(graph=graph)
@@ -250,6 +250,19 @@ def pareto_poisson_tests():
         print('median', median)
 
 
+def hyper_alarm_generate():
+    graph = hyper_alarm()
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(10000, 30000)
+    mean, f_mean = Tests.sample_dim(samples, 'B')
+    print(mean, f_mean)
+    mean, f_mean = Tests.sample_dim(samples, 'E')
+    print(mean, f_mean)
+
+    for i, sample in enumerate(samples):
+        if i < 301 and i % 3 == 0:
+            print(sample)
+
 def faculty_mean_prior(x):
     return Tests.normal_pdf(x, 5, 1 / 9)
 
@@ -291,7 +304,8 @@ class Tests:
                           'tanks': tanks_tests,
                           'progress': progress_tests,
                           'pareto-poisson': pareto_poisson_tests,
-                          'hyper_1': faculty_evaluation_1hyper_tests}
+                          'faculty-hyper': hyper_faculty_tests,
+                          'alarm-hyper-gen': hyper_alarm_generate}
 
     def perform_tests(self, tests):
         for test in tests:

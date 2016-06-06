@@ -31,11 +31,12 @@ class Graph:
 
 class Node:
 
-    def __init__(self, name, graph=None, val=1, observed=False):
+    def __init__(self, name, graph=None, val=1, observed=False, hyper=False):
         self.name = name
         self._graph = graph
         self._val = val
         self.observed = observed
+        self.hyper = hyper
         self._parents = None
         self._children = None
 
@@ -85,7 +86,7 @@ class BinaryNode(Node):
             return np.log(1.0 - prob)
 
     def _parent_values(self):
-        l = [p._val for p in self.parents]
+        l = [p._val for p in self.parents if not p.hyper]
         return tuple(l)
 
     def sample(self):
