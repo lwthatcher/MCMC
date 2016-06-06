@@ -4,6 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.pylab as mlab
 import matplotlib.patches as mpatches
+import matplotlib.colors
 import argparse
 from networks import *
 import pickle
@@ -330,20 +331,18 @@ class Tests:
 
     @classmethod
     def plot_multi(cls, samples, dims):
-        x = []
-        for dim in dims:
-            x.append([s[dim] for s in samples])
-
-        print("I'm supposed to be plotting stuff now")
-        fig, ax1 = plt.subplots()
-        h1 = ax1.hist(x[0], bins=40, normed=True, label='mu', color='r', alpha=0.9)
-        red_patch = mpatches.Patch(color='red', label='mu', alpha=0.9)
-        ax1.set_label('mu')
-        ax2 = ax1.twiny()
-        h2 = ax2.hist(x[1], bins=40, normed=True, label='sigma2', color='b', alpha=0.5)
-        blue_patch = mpatches.Patch(color='b', label='sigma2', alpha=0.5)
-        ax2.set_label('sigma2')
-        plt.legend(handles=[red_patch, blue_patch])
+        color_list = matplotlib.colors.ColorConverter.colors
+        it = iter(sorted(color_list.items()))
+        fig, ax = plt.subplots()
+        patches = []
+        for i, dim in enumerate(dims):
+            x = [s[dim] for s in samples]
+            c = next(it)[1]
+            ax.hist(x, bins=40, normed=True, label=dim, color=c, alpha=0.5)
+            patch = mpatches.Patch(color=c, label=dim, alpha=0.5)
+            patches.append(patch)
+            ax = ax.twiny()
+        plt.legend(handles=patches)
         plt.show()
 
     @classmethod
