@@ -16,6 +16,39 @@ def alarm():
     return Graph(connections, nodes)
 
 
+def hyper_alarm():
+
+    nodes = [BetaNode('b_B', 1, 1, val=0.2),
+             BetaNode('b_E', 1, 1, val=0.3),
+             BetaNode('b_A_11', 1, 1, val=0.95),
+             BetaNode('b_A_10', 1, 1, val=0.94),
+             BetaNode('b_A_01', 1, 1, val=0.29),
+             BetaNode('b_A_00', 1, 1, val=0.2),
+             BetaNode('b_J_1', 1, 1, val=0.9),
+             BetaNode('b_J_0', 1, 1, val=0.2),
+             BetaNode('b_M_1', 1, 1, val=0.7),
+             BetaNode('b_M_0', 1, 1, val=0.3),
+             BinaryNode('B', {(): 'b_B'}, val=0.),
+             BinaryNode('E', {(): 'b_E'}, val=0.),
+             BinaryNode('A', {(1, 1): 'b_A_11', (1, 0): 'b_A_10', (0, 1): 'b_A_01', (0, 0): 'b_A_00'}, val=0.),
+             BinaryNode('J', {(1,): 'b_J_1', (0,): 'b_J_0'}),
+             BinaryNode('M', {(1,): 'b_M_1', (0,): 'b_M_0'})]
+    connections = OrderedDict([('B', ['A']),
+                               ('E', ['A']),
+                               ('A', ['J', 'M']),
+                               ('b_B', ['B']),
+                               ('b_E', ['E']),
+                               ('b_A_11', ['A']),
+                               ('b_A_10', ['A']),
+                               ('b_A_01', ['A']),
+                               ('b_A_00', ['A']),
+                               ('b_J_1', ['J']),
+                               ('b_J_0', ['J']),
+                               ('b_M_1', ['M']),
+                               ('b_M_0', ['M'])])
+    return Graph(connections, nodes)
+
+
 def burn():
     nodes = [BinaryNode('A', {(): 0.05}),
              BinaryNode('P', {(): 0.01}),
