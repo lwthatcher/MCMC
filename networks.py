@@ -153,7 +153,7 @@ def faculty_evals_1hyper(n):
               5.37, 5.35, 5.30, 5.27, 4.94, 4.50]
 
     hyper_nodes = [NormalNode('mu_mu', 5.7, 1, val=5.7),
-                   InverseGammaNode('mu_var', 10, 1, val=1/9),
+                   InverseGammaNode('mu_var', 3, .3, val=1/9),
                    GammaNode('var_a', 30, 2.75, val=11.),
                    GammaNode('var_b', 5, 1.3)]
 
