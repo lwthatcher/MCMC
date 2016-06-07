@@ -179,16 +179,24 @@ def hyper_alarm_learn(observations=None, n=1000, val_dict=None, inference=False)
     obs = _temp_obs
     print('using ' + str(len(obs)) + ' observations')
 
-    nodes = [BetaNode('b_B', 1, 1, val=vals['b_B'], hyper=True),
-             BetaNode('b_E', 1, 1, val=vals['b_E'], hyper=True),
-             BetaNode('b_A_11', 1, 1, val=vals['b_A_11'], hyper=True),
-             BetaNode('b_A_10', 1, 1, val=vals['b_A_10'], hyper=True),
-             BetaNode('b_A_01', 1, 1, val=vals['b_A_01'], hyper=True),
-             BetaNode('b_A_00', 1, 1, val=vals['b_A_00'], hyper=True),
-             BetaNode('b_J_1', 1, 1, val=vals['b_J_1'], hyper=True),
-             BetaNode('b_J_0', 1, 1, val=vals['b_J_0'],hyper=True),
-             BetaNode('b_M_1', 1, 1, val=vals['b_M_1'], hyper=True),
-             BetaNode('b_M_0', 1, 1, val=vals['b_M_0'], hyper=True)]
+    vh = False
+    for v in vals:
+        if vals[v] == "x":
+            vh = True
+    nodes = [BetaNode('b_B', 1, 1, val=_get_value(vals, 'b_B', False), hyper=True, observed=_get_observed(vals, 'b_B', vh)),
+             BetaNode('b_E', 1, 1, val=_get_value(vals, 'b_E', False), hyper=True, observed=_get_observed(vals, 'b_E', vh)),
+             BetaNode('b_A_11', 1, 1, val=_get_value(vals, 'b_A_11', False), hyper=True, observed=_get_observed(vals, 'b_A_11', vh)),
+             BetaNode('b_A_10', 1, 1, val=_get_value(vals, 'b_A_10', False), hyper=True, observed=_get_observed(vals, 'b_A_10', vh)),
+             BetaNode('b_A_01', 1, 1, val=_get_value(vals, 'b_A_01', False), hyper=True, observed=_get_observed(vals, 'b_A_01', vh)),
+             BetaNode('b_A_00', 1, 1, val=_get_value(vals, 'b_A_00', False), hyper=True, observed=_get_observed(vals, 'b_A_00', vh)),
+             BetaNode('b_J_1', 1, 1, val=_get_value(vals, 'b_J_1', False), hyper=True, observed=_get_observed(vals, 'b_J_1', vh)),
+             BetaNode('b_J_0', 1, 1, val=_get_value(vals, 'b_J_0', False), hyper=True, observed=_get_observed(vals, 'b_J_0', vh)),
+             BetaNode('b_M_1', 1, 1, val=_get_value(vals, 'b_M_1', False), hyper=True, observed=_get_observed(vals, 'b_M_1', vh)),
+             BetaNode('b_M_0', 1, 1, val=_get_value(vals, 'b_M_0', False), hyper=True, observed=_get_observed(vals, 'b_M_0', vh))]
+
+    num_obs = [1 for x in nodes if x.observed]
+    num_obs = sum(num_obs)
+    print(num_obs, ' observed hyper-parameters')
 
     cdict = {'B': [], 'E': [], 'A': [], 'J': [], 'M': []}
     _cons = []
@@ -244,16 +252,22 @@ def hyper_alarm_learn(observations=None, n=1000, val_dict=None, inference=False)
     return Graph(connections, nodes)
 
 
-def _get_value(obs, letter):
+def _get_value(obs, letter, inv=True):
     x = obs[letter]
     if isinstance(x, str):
-        return 0
+        if inv:
+            return 0
+        else:
+            return 0.1
     else:
         return x
 
 
-def _get_observed(obs, letter):
-    return obs[letter] != 'x'
+def _get_observed(obs, letter, inv=True):
+    if inv:
+        return obs[letter] != 'x'
+    else:
+        return False
 
 
 def burn():

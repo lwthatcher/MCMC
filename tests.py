@@ -272,18 +272,18 @@ def hyper_alarm_generate():
 
 
 def hyper_alarm_learning_tests():
-    legs = [10, 25, 50, 75, 100, 250, 500, 750, 1000]
-    prior = 'lab'
-    model = 'noz'
+    legs = [500]
+    prior = 'lab_3'
+    model = 'lab'
     for n in legs:
         graph = hyper_alarm_learn('alarm-gen-' + model + '.json', n=n, val_dict=prior)
         mcmc = MCMC(graph=graph)
         samples = mcmc.gibbs(1000, 1000)
         mean, f_mean = Tests.sample_dim(samples, 'b_B')
         print(mean, f_mean)
-        mean, f_mean = Tests.sample_dim(samples, 'b_E')
-        print(mean, f_mean)
-        name = 'alarm-' + model + '_' + str(n) + '_samples.pickle'
+        #mean, f_mean = Tests.sample_dim(samples, 'b_E')
+        #print(mean, f_mean)
+        name = 'alarm-' + model + '_3_' + str(n) + '_samples.pickle'
         with open(name, 'wb') as f:
             pickle.dump(samples, f)
 
