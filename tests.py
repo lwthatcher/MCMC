@@ -274,7 +274,7 @@ def hyper_alarm_generate():
 def hyper_alarm_learning_tests():
     legs = [10, 25, 50, 75, 100, 250, 500, 750, 1000]
     prior = 'lab'
-    model = 'orig'
+    model = 'noz'
     for n in legs:
         graph = hyper_alarm_learn('alarm-gen-' + model + '.json', n=n, val_dict=prior)
         mcmc = MCMC(graph=graph)
