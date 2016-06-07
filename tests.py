@@ -267,28 +267,30 @@ def hyper_alarm_generate():
         if i < 3001 and i % 3 == 0:
             #print(sample)
             saved_samples.append(sample)
-    with open('alarm-gen-lab.json', 'w') as f:
+    with open('alarm-gen-' + val_dict + '.json', 'w') as f:
         json.dump(saved_samples,f)
 
 
 def hyper_alarm_learning_tests():
     legs = [10, 25, 50, 75, 100, 250, 500, 750, 1000]
+    prior = 'lab'
+    model = 'orig'
     for n in legs:
-        graph = hyper_alarm_learn('alarm-gen-lab.json', n=n)
+        graph = hyper_alarm_learn('alarm-gen-' + model + '.json', n=n, val_dict=prior)
         mcmc = MCMC(graph=graph)
         samples = mcmc.gibbs(1000, 1000)
         mean, f_mean = Tests.sample_dim(samples, 'b_B')
         print(mean, f_mean)
         mean, f_mean = Tests.sample_dim(samples, 'b_E')
         print(mean, f_mean)
-        name = 'alarm-lab_' + str(n) + '_samples.pickle'
+        name = 'alarm-' + model + '_' + str(n) + '_samples.pickle'
         with open(name, 'wb') as f:
             pickle.dump(samples, f)
 
 
 def load_hyper_alarm():
     legs = [10, 25, 50, 75, 100, 250, 500, 750, 1000]
-    model = '01'
+    model = 'orig'
     with open('alarm-expected-' + model + '.json', 'r') as f:
         expected = json.load(f)
     for n in legs:
