@@ -252,7 +252,8 @@ def pareto_poisson_tests():
 
 
 def hyper_alarm_generate():
-    graph = hyper_alarm()
+    val_dict = 'orig'
+    graph = hyper_alarm(val_dict)
     mcmc = MCMC(graph=graph)
     samples = mcmc.gibbs(10000, 30000)
     mean, f_mean = Tests.sample_dim(samples, 'B')
@@ -265,21 +266,21 @@ def hyper_alarm_generate():
         if i < 3001 and i % 3 == 0:
             #print(sample)
             saved_samples.append(sample)
-    with open('alarm-gen-01.json', 'w') as f:
+    with open('alarm-gen-lab.json', 'w') as f:
         json.dump(saved_samples,f)
 
 
 def hyper_alarm_learning_tests():
-    legs = [10, 25, 50, 75, 100, 250, 500, 750]
+    legs = [10, 25, 50, 75, 100, 250, 500, 750, 1000]
     for n in legs:
-        graph = hyper_alarm_learn('alarm-gen-01.json', n=n)
+        graph = hyper_alarm_learn('alarm-gen-lab.json', n=n)
         mcmc = MCMC(graph=graph)
         samples = mcmc.gibbs(1000, 1000)
         mean, f_mean = Tests.sample_dim(samples, 'b_B')
         print(mean, f_mean)
         mean, f_mean = Tests.sample_dim(samples, 'b_E')
         print(mean, f_mean)
-        name = 'alarm-01_' + str(n) + '_samples.pickle'
+        name = 'alarm-lab_' + str(n) + '_samples.pickle'
         with open(name, 'wb') as f:
             pickle.dump(samples, f)
 

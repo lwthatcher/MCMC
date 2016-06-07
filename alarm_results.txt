@@ -1,6 +1,18 @@
 
 #Our Network
 
+##true values
+P(B=t) =  0.2
+P(E=t) =  0.7
+P(A=t | B=t, E=t) =  0.95
+P(A=t | B=t, E=f) =  0.94
+P(A=t | B=f, E=t) =  0.25
+P(A=t | B=f, E=f) =  0.01
+P(J=t | A=t) =  0.95
+P(J=t | A=f) =  0.2
+P(M=t | A=t) =  0.77
+P(M=t | A=f) =  0.1
+
 ##n =  10
 P(B=t) =  0.0738204458989
 P(E=t) =  0.677003881353

@@ -17,18 +17,23 @@ def alarm():
     return Graph(connections, nodes)
 
 
-def hyper_alarm():
+def hyper_alarm(val_dict=None):
+    if val_dict is None:
+        val_dict = 'lab'
+    val_dict = 'alarm-expected-' + val_dict + '.json'
+    with open(val_dict, 'r') as f:
+        vals = json.load(f)
 
-    nodes = [BetaNode('b_B', 1, 1, val=0.15, observed=True, hyper=True),
-             BetaNode('b_E', 1, 1, val=0.7, observed=True, hyper=True),
-             BetaNode('b_A_11', 1, 1, val=0.95, observed=True, hyper=True),
-             BetaNode('b_A_10', 1, 1, val=0.94, observed=True, hyper=True),
-             BetaNode('b_A_01', 1, 1, val=0.25, observed=True, hyper=True),
-             BetaNode('b_A_00', 1, 1, val=0.01, observed=True, hyper=True),
-             BetaNode('b_J_1', 1, 1, val=0.95, observed=True, hyper=True),
-             BetaNode('b_J_0', 1, 1, val=0.2, observed=True, hyper=True),
-             BetaNode('b_M_1', 1, 1, val=0.77, observed=True, hyper=True),
-             BetaNode('b_M_0', 1, 1, val=0.1, observed=True, hyper=True),
+    nodes = [BetaNode('b_B', 1, 1, val=vals['b_B'], observed=True, hyper=True),
+             BetaNode('b_E', 1, 1, val=vals['b_E'], observed=True, hyper=True),
+             BetaNode('b_A_11', 1, 1, val=vals['b_A_11'], observed=True, hyper=True),
+             BetaNode('b_A_10', 1, 1, val=vals['b_A_10'], observed=True, hyper=True),
+             BetaNode('b_A_01', 1, 1, val=vals['b_A_01'], observed=True, hyper=True),
+             BetaNode('b_A_00', 1, 1, val=vals['b_A_00'], observed=True, hyper=True),
+             BetaNode('b_J_1', 1, 1, val=vals['b_J_1'], observed=True, hyper=True),
+             BetaNode('b_J_0', 1, 1, val=vals['b_J_0'], observed=True, hyper=True),
+             BetaNode('b_M_1', 1, 1, val=vals['b_M_1'], observed=True, hyper=True),
+             BetaNode('b_M_0', 1, 1, val=vals['b_M_0'], observed=True, hyper=True),
              BinaryNode('B', {(): 'b_B'}, val=0.),
              BinaryNode('E', {(): 'b_E'}, val=0.),
              BinaryNode('A', {(1, 1): 'b_A_11', (1, 0): 'b_A_10', (0, 1): 'b_A_01', (0, 0): 'b_A_00'}, val=0.),
@@ -51,7 +56,12 @@ def hyper_alarm():
 
 
 # noinspection PyTypeChecker
-def hyper_alarm_learn(observations=None, n=1000):
+def hyper_alarm_learn(observations=None, n=1000, val_dict=None):
+    if val_dict is None:
+        val_dict = 'orig'
+    val_dict = 'alarm-expected-' + val_dict + '.json'
+    with open(val_dict, 'r') as f:
+        vals = json.load(f)
 
     _obs = [{'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
            {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
@@ -169,16 +179,16 @@ def hyper_alarm_learn(observations=None, n=1000):
     obs = _temp_obs
     print('using ' + str(len(obs)) + ' observations')
 
-    nodes = [BetaNode('b_B', 1, 1, val=0.2, hyper=True),
-             BetaNode('b_E', 1, 1, val=0.3, hyper=True),
-             BetaNode('b_A_11', 1, 1, val=0.95, hyper=True),
-             BetaNode('b_A_10', 1, 1, val=0.94, hyper=True),
-             BetaNode('b_A_01', 1, 1, val=0.29, hyper=True),
-             BetaNode('b_A_00', 1, 1, val=0.2, hyper=True),
-             BetaNode('b_J_1', 1, 1, val=0.9, hyper=True),
-             BetaNode('b_J_0', 1, 1, val=0.2,hyper=True),
-             BetaNode('b_M_1', 1, 1, val=0.7, hyper=True),
-             BetaNode('b_M_0', 1, 1, val=0.3, hyper=True)]
+    nodes = [BetaNode('b_B', 1, 1, val=vals['b_B'], hyper=True),
+             BetaNode('b_E', 1, 1, val=vals['b_E'], hyper=True),
+             BetaNode('b_A_11', 1, 1, val=vals['b_A_11'], hyper=True),
+             BetaNode('b_A_10', 1, 1, val=vals['b_A_10'], hyper=True),
+             BetaNode('b_A_01', 1, 1, val=vals['b_A_01'], hyper=True),
+             BetaNode('b_A_00', 1, 1, val=vals['b_A_00'], hyper=True),
+             BetaNode('b_J_1', 1, 1, val=vals['b_J_1'], hyper=True),
+             BetaNode('b_J_0', 1, 1, val=vals['b_J_0'],hyper=True),
+             BetaNode('b_M_1', 1, 1, val=vals['b_M_1'], hyper=True),
+             BetaNode('b_M_0', 1, 1, val=vals['b_M_0'], hyper=True)]
 
     cdict = {'B': [], 'E': [], 'A': [], 'J': [], 'M': []}
     _cons = []
