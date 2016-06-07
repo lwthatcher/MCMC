@@ -199,11 +199,11 @@ def hyper_alarm_learn(observations=None, n=1000, val_dict=None, inference=False)
         A = 'A'+str(i)
         J = 'J'+str(i)
         M = 'M'+str(i)
-        nodes.append(BinaryNode(B, {(): 'b_B'}, val=o['B'], observed=True))
-        nodes.append(BinaryNode(E, {(): 'b_E'}, val=o['E'], observed=True))
-        nodes.append(BinaryNode(A, {(1, 1): 'b_A_11', (1, 0): 'b_A_10', (0, 1): 'b_A_01', (0, 0): 'b_A_00'}, val=o['A'], observed=True))
-        nodes.append(BinaryNode(J, {(1,): 'b_J_1', (0,): 'b_J_0'}, val=o['J'], observed=True))
-        nodes.append(BinaryNode(M, {(1,): 'b_M_1', (0,): 'b_M_0'}, val=o['M'], observed=True))
+        nodes.append(BinaryNode(B, {(): 'b_B'}, val=_get_value(o,'B'), observed=_get_observed(o, 'B')))
+        nodes.append(BinaryNode(E, {(): 'b_E'}, val=_get_value(o,'E'), observed=_get_observed(o, 'E')))
+        nodes.append(BinaryNode(A, {(1, 1): 'b_A_11', (1, 0): 'b_A_10', (0, 1): 'b_A_01', (0, 0): 'b_A_00'}, val=_get_value(o,'A'), observed=_get_observed(o, 'A')))
+        nodes.append(BinaryNode(J, {(1,): 'b_J_1', (0,): 'b_J_0'}, val=_get_value(o,'J'), observed=_get_observed(o, 'J')))
+        nodes.append(BinaryNode(M, {(1,): 'b_M_1', (0,): 'b_M_0'}, val=_get_value(o,'M'), observed=_get_observed(o, 'M')))
         cdict['B'].append(B)
         cdict['E'].append(E)
         cdict['A'].append(A)
@@ -242,6 +242,18 @@ def hyper_alarm_learn(observations=None, n=1000, val_dict=None, inference=False)
     connections = OrderedDict(_cons)
 
     return Graph(connections, nodes)
+
+
+def _get_value(obs, letter):
+    x = obs[letter]
+    if isinstance(x, str):
+        return 0
+    else:
+        return x
+
+
+def _get_observed(obs, letter):
+    return obs[letter] != 'x'
 
 
 def burn():
