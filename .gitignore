@@ -8,6 +8,7 @@ __pycache__/
 
 # saved samples, graphs, data, etc...
 *_samples.pickle
+*-samples.pickle
 *_graph.pickle
 *.json
 *.odt#
