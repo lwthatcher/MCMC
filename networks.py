@@ -51,7 +51,7 @@ def hyper_alarm():
 
 
 # noinspection PyTypeChecker
-def hyper_alarm_learn(observations=None):
+def hyper_alarm_learn(observations=None, n=1000):
 
     _obs = [{'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
            {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
@@ -160,6 +160,14 @@ def hyper_alarm_learn(observations=None):
     else:
         with open(observations, 'r') as f:
             obs = json.load(f)
+
+    if n > len(obs):
+        n = len(obs)
+    _temp_obs = []
+    for i in range(n):
+        _temp_obs.append(obs[i])
+    obs = _temp_obs
+    print('using ' + str(len(obs)) + ' observations')
 
     nodes = [BetaNode('b_B', 1, 1, val=0.2, hyper=True),
              BetaNode('b_E', 1, 1, val=0.3, hyper=True),

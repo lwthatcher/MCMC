@@ -270,42 +270,50 @@ def hyper_alarm_generate():
 
 
 def hyper_alarm_learning_tests():
-    graph = hyper_alarm_learn('alarm-gen-01.json')
-    mcmc = MCMC(graph=graph)
-    samples = mcmc.gibbs(1000, 1000)
-    mean, f_mean = Tests.sample_dim(samples, 'b_B')
-    print(mean, f_mean)
-    mean, f_mean = Tests.sample_dim(samples, 'b_E')
-    print(mean, f_mean)
-    with open('alarm-01-samples.pickle', 'wb') as f:
-        pickle.dump(samples, f)
+    legs = [10, 25, 50, 75, 100, 250, 500, 750]
+    for n in legs:
+        graph = hyper_alarm_learn('alarm-gen-01.json', n=n)
+        mcmc = MCMC(graph=graph)
+        samples = mcmc.gibbs(1000, 1000)
+        mean, f_mean = Tests.sample_dim(samples, 'b_B')
+        print(mean, f_mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_E')
+        print(mean, f_mean)
+        name = 'alarm-01_' + str(n) + '_samples.pickle'
+        with open(name, 'wb') as f:
+            pickle.dump(samples, f)
 
 
 def load_hyper_alarm():
-    samples = load_samples('alarm-01-samples.pickle')
-    mean, f_mean = Tests.sample_dim(samples, 'b_B')
-    print('P(B=t) = ', mean)
-    mean, f_mean = Tests.sample_dim(samples, 'b_E')
-    print('P(E=t) = ', mean)
+    legs = [10, 25, 50, 75, 100, 250, 500, 750]
+    for n in legs:
+        print('n = ', n)
+        name = 'alarm-01_' + str(n) + '_samples.pickle'
+        samples = load_samples(name)
+        mean, f_mean = Tests.sample_dim(samples, 'b_B')
+        print('P(B=t) = ', mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_E')
+        print('P(E=t) = ', mean)
 
-    mean, f_mean = Tests.sample_dim(samples, 'b_A_11')
-    print('P(A=t | B=t, E=t) = ', mean)
-    mean, f_mean = Tests.sample_dim(samples, 'b_A_10')
-    print('P(A=t | B=t, E=f) = ', mean)
-    mean, f_mean = Tests.sample_dim(samples, 'b_A_01')
-    print('P(A=t | B=f, E=t) = ', mean)
-    mean, f_mean = Tests.sample_dim(samples, 'b_A_00')
-    print('P(A=t | B=f, E=f) = ', mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_A_11')
+        print('P(A=t | B=t, E=t) = ', mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_A_10')
+        print('P(A=t | B=t, E=f) = ', mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_A_01')
+        print('P(A=t | B=f, E=t) = ', mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_A_00')
+        print('P(A=t | B=f, E=f) = ', mean)
 
-    mean, f_mean = Tests.sample_dim(samples, 'b_J_1')
-    print('P(J=t | A=t) = ', mean)
-    mean, f_mean = Tests.sample_dim(samples, 'b_J_0')
-    print('P(J=t | A=f) = ', mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_J_1')
+        print('P(J=t | A=t) = ', mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_J_0')
+        print('P(J=t | A=f) = ', mean)
 
-    mean, f_mean = Tests.sample_dim(samples, 'b_M_1')
-    print('P(M=t | A=t) = ', mean)
-    mean, f_mean = Tests.sample_dim(samples, 'b_M_0')
-    print('P(M=t | A=f) = ', mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_M_1')
+        print('P(M=t | A=t) = ', mean)
+        mean, f_mean = Tests.sample_dim(samples, 'b_M_0')
+        print('P(M=t | A=f) = ', mean)
+        print()
 
 
 def faculty_mean_prior(x):
