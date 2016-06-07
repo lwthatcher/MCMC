@@ -2,6 +2,7 @@ import random
 from collections import OrderedDict
 from graph import *
 import csv
+import json
 
 
 def alarm():
@@ -50,8 +51,9 @@ def hyper_alarm():
 
 
 # noinspection PyTypeChecker
-def hyper_alarm_learn():
-    obs = [{'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
+def hyper_alarm_learn(observations=None):
+
+    _obs = [{'M': 0, 'B': 0, 'E': 1, 'J': 1, 'A': 0},
            {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
            {'M': 0, 'B': 0, 'E': 0, 'J': 1, 'A': 0},
            {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
@@ -152,6 +154,12 @@ def hyper_alarm_learn():
            {'M': 1, 'B': 0, 'E': 0, 'J': 0, 'A': 0},
            {'M': 0, 'B': 0, 'E': 1, 'J': 0, 'A': 0},
            {'M': 0, 'B': 0, 'E': 0, 'J': 0, 'A': 0}]
+
+    if observations is None:
+        obs = _obs
+    else:
+        with open(observations, 'r') as f:
+            obs = json.load(f)
 
     nodes = [BetaNode('b_B', 1, 1, val=0.2, hyper=True),
              BetaNode('b_E', 1, 1, val=0.3, hyper=True),

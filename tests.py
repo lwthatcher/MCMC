@@ -7,6 +7,7 @@ import matplotlib.colors
 import argparse
 from networks import *
 import pickle
+import json
 from samples_loader import load_samples
 
 
@@ -261,20 +262,23 @@ def hyper_alarm_generate():
 
     saved_samples = []
     for i, sample in enumerate(samples):
-        if i < 301 and i % 3 == 0:
+        if i < 3001 and i % 3 == 0:
             #print(sample)
             saved_samples.append(sample)
-    print(saved_samples)
+    with open('alarm-gen-01.json', 'w') as f:
+        json.dump(saved_samples,f)
 
 
 def hyper_alarm_learning_tests():
-    graph = hyper_alarm_learn()
+    graph = hyper_alarm_learn('alarm-gen-01.json')
     mcmc = MCMC(graph=graph)
     samples = mcmc.gibbs(1000, 1000)
     mean, f_mean = Tests.sample_dim(samples, 'b_B')
     print(mean, f_mean)
     mean, f_mean = Tests.sample_dim(samples, 'b_E')
     print(mean, f_mean)
+    with open('alarm-01-samples.pickle', 'wb') as f:
+        pickle.dump(samples, f)
 
 
 def faculty_mean_prior(x):

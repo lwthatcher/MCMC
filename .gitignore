@@ -6,6 +6,8 @@ __pycache__/
 # IDE stuff
 .idea/
 
-# saved samples/graphs
+# saved samples, graphs, data, etc...
 *_samples.pickle
 *_graph.pickle
+*.json
+*.odt#
