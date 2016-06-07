@@ -1,0 +1,8 @@
+# Lab
+P(B=t | M=t) = 0.305
+
+# Ours
+P(B=t | M=t) = 0.387666666667
+
+# Original
+P(B=t | M=t) = 0.144

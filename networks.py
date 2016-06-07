@@ -56,7 +56,7 @@ def hyper_alarm(val_dict=None):
 
 
 # noinspection PyTypeChecker
-def hyper_alarm_learn(observations=None, n=1000, val_dict=None):
+def hyper_alarm_learn(observations=None, n=1000, val_dict=None, inference=False):
     if val_dict is None:
         val_dict = 'orig'
     val_dict = 'alarm-expected-' + val_dict + '.json'
@@ -212,6 +212,21 @@ def hyper_alarm_learn(observations=None, n=1000, val_dict=None):
         _cons.append((B, [A]))
         _cons.append((E, [A]))
         _cons.append((A, [J, M]))
+
+    if inference:
+        nodes.append(BinaryNode('B', {(): 'b_B'}))
+        nodes.append(BinaryNode('E', {(): 'b_E'}))
+        nodes.append(BinaryNode('A', {(1, 1): 'b_A_11', (1, 0): 'b_A_10', (0, 1): 'b_A_01', (0, 0): 'b_A_00'}))
+        nodes.append(BinaryNode('J', {(1,): 'b_J_1', (0,): 'b_J_0'}))
+        nodes.append(BinaryNode('M', {(1,): 'b_M_1', (0,): 'b_M_0'}, val=1, observed=True))
+        cdict['B'].append('B')
+        cdict['E'].append('E')
+        cdict['A'].append('A')
+        cdict['J'].append('J')
+        cdict['M'].append('M')
+        _cons.append(('B', ['A']))
+        _cons.append(('E', ['A']))
+        _cons.append(('A', ['J', 'M']))
 
     _cons.append(('b_B', cdict['B']))
     _cons.append(('b_E', cdict['E']))

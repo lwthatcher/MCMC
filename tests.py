@@ -288,56 +288,66 @@ def hyper_alarm_learning_tests():
             pickle.dump(samples, f)
 
 
+def hyper_alarm_inference():
+    prior = 'lab'
+    model = 'orig'
+    graph = hyper_alarm_learn('alarm-gen-' + model + '.json', n=250, val_dict=prior, inference=True)
+    mcmc = MCMC(graph=graph)
+    samples = mcmc.gibbs(1000, 3000)
+    mean, f_mean = Tests.sample_dim(samples, 'B')
+    print(mean, f_mean)
+
+
 def load_hyper_alarm():
     legs = [10, 25, 50, 75, 100, 250, 500, 750, 1000]
     model = 'orig'
     with open('alarm-expected-' + model + '.json', 'r') as f:
         expected = json.load(f)
     for n in legs:
-        print('n = ', n)
+        #print('n = ', n)
         name = 'alarm-' + model + '_' + str(n) + '_samples.pickle'
         samples = load_samples(name)
         accuracies = []
         mean, f_mean = Tests.sample_dim(samples, 'b_B')
-        print('P(B=t) = ', mean)
+        #print('P(B=t) = ', mean)
         accuracies.append(expected['b_B'] - mean)
         mean, f_mean = Tests.sample_dim(samples, 'b_E')
-        print('P(E=t) = ', mean)
+        #print('P(E=t) = ', mean)
         accuracies.append(expected['b_E'] - mean)
 
         mean, f_mean = Tests.sample_dim(samples, 'b_A_11')
-        print('P(A=t | B=t, E=t) = ', mean)
+        #print('P(A=t | B=t, E=t) = ', mean)
         accuracies.append(expected['b_A_11'] - mean)
         mean, f_mean = Tests.sample_dim(samples, 'b_A_10')
-        print('P(A=t | B=t, E=f) = ', mean)
+        #print('P(A=t | B=t, E=f) = ', mean)
         accuracies.append(expected['b_A_10'] - mean)
         mean, f_mean = Tests.sample_dim(samples, 'b_A_01')
-        print('P(A=t | B=f, E=t) = ', mean)
+        #print('P(A=t | B=f, E=t) = ', mean)
         accuracies.append(expected['b_A_01'] - mean)
         mean, f_mean = Tests.sample_dim(samples, 'b_A_00')
-        print('P(A=t | B=f, E=f) = ', mean)
+        #print('P(A=t | B=f, E=f) = ', mean)
         accuracies.append(expected['b_A_00'] - mean)
 
         mean, f_mean = Tests.sample_dim(samples, 'b_J_1')
-        print('P(J=t | A=t) = ', mean)
+        #print('P(J=t | A=t) = ', mean)
         accuracies.append(expected['b_J_1'] - mean)
         mean, f_mean = Tests.sample_dim(samples, 'b_J_0')
-        print('P(J=t | A=f) = ', mean)
+        #print('P(J=t | A=f) = ', mean)
         accuracies.append(expected['b_J_0'] - mean)
 
         mean, f_mean = Tests.sample_dim(samples, 'b_M_1')
-        print('P(M=t | A=t) = ', mean)
+        #print('P(M=t | A=t) = ', mean)
         accuracies.append(expected['b_M_1'] - mean)
         mean, f_mean = Tests.sample_dim(samples, 'b_M_0')
-        print('P(M=t | A=f) = ', mean)
+        #print('P(M=t | A=f) = ', mean)
         accuracies.append(expected['b_M_0'] - mean)
-        print()
+        #print()
         total = 0
         for a in accuracies:
             total += abs(a)
-        print('accuracy = ', 1 - (total / len(accuracies)))
-        print()
-        print()
+        print(1 - (total / len(accuracies)))
+        #print()
+        #print()
 
 
 def faculty_mean_prior(x):
@@ -384,7 +394,8 @@ class Tests:
                           'faculty-hyper': hyper_faculty_tests,
                           'alarm-hyper-gen': hyper_alarm_generate,
                           'alarm-hyper-learn': hyper_alarm_learning_tests,
-                          'alarm-hyper-load': load_hyper_alarm}
+                          'alarm-hyper-load': load_hyper_alarm,
+                          'alarm-hyper-inf': hyper_alarm_inference}
 
     def perform_tests(self, tests):
         for test in tests:
