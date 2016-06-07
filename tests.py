@@ -281,6 +281,33 @@ def hyper_alarm_learning_tests():
         pickle.dump(samples, f)
 
 
+def load_hyper_alarm():
+    samples = load_samples('alarm-01-samples.pickle')
+    mean, f_mean = Tests.sample_dim(samples, 'b_B')
+    print('P(B=t) = ', mean)
+    mean, f_mean = Tests.sample_dim(samples, 'b_E')
+    print('P(E=t) = ', mean)
+
+    mean, f_mean = Tests.sample_dim(samples, 'b_A_11')
+    print('P(A=t | B=t, E=t) = ', mean)
+    mean, f_mean = Tests.sample_dim(samples, 'b_A_10')
+    print('P(A=t | B=t, E=f) = ', mean)
+    mean, f_mean = Tests.sample_dim(samples, 'b_A_01')
+    print('P(A=t | B=f, E=t) = ', mean)
+    mean, f_mean = Tests.sample_dim(samples, 'b_A_00')
+    print('P(A=t | B=f, E=f) = ', mean)
+
+    mean, f_mean = Tests.sample_dim(samples, 'b_J_1')
+    print('P(J=t | A=t) = ', mean)
+    mean, f_mean = Tests.sample_dim(samples, 'b_J_0')
+    print('P(J=t | A=f) = ', mean)
+
+    mean, f_mean = Tests.sample_dim(samples, 'b_M_1')
+    print('P(M=t | A=t) = ', mean)
+    mean, f_mean = Tests.sample_dim(samples, 'b_M_0')
+    print('P(M=t | A=f) = ', mean)
+
+
 def faculty_mean_prior(x):
     return Tests.normal_pdf(x, 5, 1 / 9)
 
@@ -324,7 +351,8 @@ class Tests:
                           'pareto-poisson': pareto_poisson_tests,
                           'faculty-hyper': hyper_faculty_tests,
                           'alarm-hyper-gen': hyper_alarm_generate,
-                          'alarm-hyper-learn': hyper_alarm_learning_tests}
+                          'alarm-hyper-learn': hyper_alarm_learning_tests,
+                          'alarm-hyper-load': load_hyper_alarm}
 
     def perform_tests(self, tests):
         for test in tests:
