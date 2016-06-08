@@ -2,7 +2,7 @@ import json
 import random
 
 model = '01'
-p = 0.25
+p = 0.5
 
 file_name = 'alarm-gen-' + model + '.json'
 with open(file_name, 'r') as f:

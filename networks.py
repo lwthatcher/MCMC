@@ -17,7 +17,7 @@ def alarm():
     return Graph(connections, nodes)
 
 
-def hyper_alarm(val_dict=None):
+def hyper_alarm(val_dict=None, inference=False):
     if val_dict is None:
         val_dict = 'lab'
     val_dict = 'alarm-expected-' + val_dict + '.json'
@@ -38,7 +38,7 @@ def hyper_alarm(val_dict=None):
              BinaryNode('E', {(): 'b_E'}, val=0.),
              BinaryNode('A', {(1, 1): 'b_A_11', (1, 0): 'b_A_10', (0, 1): 'b_A_01', (0, 0): 'b_A_00'}, val=0.),
              BinaryNode('J', {(1,): 'b_J_1', (0,): 'b_J_0'}),
-             BinaryNode('M', {(1,): 'b_M_1', (0,): 'b_M_0'})]
+             BinaryNode('M', {(1,): 'b_M_1', (0,): 'b_M_0'}, val=1, observed=inference)]
     connections = OrderedDict([('B', ['A']),
                                ('E', ['A']),
                                ('A', ['J', 'M']),
@@ -194,9 +194,9 @@ def hyper_alarm_learn(observations=None, n=1000, val_dict=None, inference=False)
              BetaNode('b_M_1', 1, 1, val=_get_value(vals, 'b_M_1', False), hyper=True, observed=_get_observed(vals, 'b_M_1', vh)),
              BetaNode('b_M_0', 1, 1, val=_get_value(vals, 'b_M_0', False), hyper=True, observed=_get_observed(vals, 'b_M_0', vh))]
 
-    num_obs = [1 for x in nodes if x.observed]
-    num_obs = sum(num_obs)
-    print(num_obs, ' observed hyper-parameters')
+    # num_obs = [1 for x in nodes if x.observed]
+    # num_obs = sum(num_obs)
+    # print(num_obs, ' observed hyper-parameters')
 
     cdict = {'B': [], 'E': [], 'A': [], 'J': [], 'M': []}
     _cons = []
